@@ -64,19 +64,10 @@ const files = [
 
 export default function DetailsScreen() {
   return (
-    // eslint-disable-next-line react-native/no-inline-styles
-    <ScrollView style={{width: '90%', marginLeft: '5%'}}>
-      <View
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={{
-          marginTop: 20,
-          flexWrap: 'wrap',
-          flexDirection: 'row',
-          rowGap: 20,
-        }}>
+    <ScrollView style={styles.scrollView}>
+      <View style={styles.listFolders}>
         {files.map((value, index) => (
-          // eslint-disable-next-line react-native/no-inline-styles
-          <TouchableOpacity style={{flexBasis: '33.3%'}}>
+          <TouchableOpacity style={styles.item} key={index}>
             <View style={styles.fileContent} key={index}>
               <Image source={value.src} />
               <Text>
@@ -91,6 +82,7 @@ export default function DetailsScreen() {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {width: '90%', marginLeft: '5%'},
   button: {
     width: '90%',
     marginLeft: '5%',
@@ -113,5 +105,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  listFolders: {
+    marginTop: 20,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    rowGap: 20,
+  },
+  item: {
+    flexBasis: '33.3%',
   },
 });

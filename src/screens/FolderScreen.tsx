@@ -99,42 +99,25 @@ const files = [
   },
 ];
 
-export default function HomeScreen({navigation}: any) {
+export default function FolderScreen({navigation}: any) {
   return (
-    // eslint-disable-next-line react-native/no-inline-styles
-    <ScrollView style={{width: '90%', marginLeft: '5%'}}>
+    <ScrollView style={styles.scrollView}>
       <View>
-        <Text
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            fontWeight: 'bold',
-            fontSize: 30,
-            marginLeft: '5%',
-            marginTop: 20,
-          }}>
-          Library
-        </Text>
+        <Text style={styles.headerTitle}>Library</Text>
         <View style={styles.button}>
           <Image source={Star} />
           <Text style={styles.text}>
             Upgrade to get the most out of Scan Studio
           </Text>
         </View>
-        <View
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            marginTop: 20,
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            rowGap: 20,
-          }}>
+        <View style={styles.listFolders}>
           {files.map((value, index) => (
             <TouchableOpacity
               onPress={() =>
                 value.type === 'folder' && navigation.navigate('Details')
               }
-              // eslint-disable-next-line react-native/no-inline-styles
-              style={{flexBasis: '33.3%'}}>
+              style={styles.item}
+              key={index}>
               <View style={styles.fileContent} key={index}>
                 <Image source={value.src} />
                 <Text>
@@ -150,6 +133,7 @@ export default function HomeScreen({navigation}: any) {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {width: '90%', marginLeft: '5%'},
   button: {
     width: '90%',
     marginLeft: '5%',
@@ -172,5 +156,20 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  listFolders: {
+    marginTop: 20,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    rowGap: 20,
+  },
+  item: {
+    flexBasis: '33.3%',
+  },
+  headerTitle: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginLeft: '5%',
+    marginTop: 20,
   },
 });
