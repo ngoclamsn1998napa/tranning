@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import Files from '../assets/Files.png';
 import FolderIcon from '../assets/folderIcon.png';
@@ -11,28 +11,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FolderTab from './Tabs/FolderTab';
 const Tab = createBottomTabNavigator();
 
+import TabBarIcon from '../components/TabBarIcon';
+import TabBarScanQrIcon from '../components/TabBarScanQrIcon';
 import HomeScreen from './HomeScreen';
 import ScanScreen from './ScanScreen';
 import SearchScreen from './SearchScreen';
 import ToolScreen from './ToolScreen';
-
-const TabBarIcon = (focused: any, image: any) => (
-  <View style={styles.center}>
-    <Image
-      source={image}
-      resizeMode="contain"
-      style={styles.tabBarIcon(focused)}
-    />
-  </View>
-);
-
-const TabBarScanQrIcon = (image: any) => (
-  <View style={styles.ScanQr}>
-    <TouchableOpacity>
-      <Image source={image} />
-    </TouchableOpacity>
-  </View>
-);
 
 function MainContainer() {
   const screenOptions = {
