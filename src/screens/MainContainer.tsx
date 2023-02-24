@@ -45,7 +45,7 @@ function MainContainer() {
         component={FolderTab}
       />
       <Tab.Screen
-        name="Mid"
+        name="Scan"
         options={{
           tabBarIcon: () => TabBarScanQrIcon(MidIcon),
         }}

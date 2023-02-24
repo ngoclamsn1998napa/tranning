@@ -1,10 +1,8 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 
 const TabBarScanQrIcon = (image: any) => (
   <View style={styles.ScanQr}>
-    <TouchableOpacity>
-      <Image source={image} />
-    </TouchableOpacity>
+    <Image source={image} />
   </View>
 );
 
