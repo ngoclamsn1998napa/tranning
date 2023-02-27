@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import fileLock from '../../assets/fileLock.png';
-import folder from '../../assets/folder.png';
-import pdfFile from '../../assets/pdfFile.png';
-import Star from '../../assets/star.png';
+import fileLock from '../assets/fileLock.png';
+import folder from '../assets/folder.png';
+import pdfFile from '../assets/pdfFile.png';
+import Star from '../assets/star.png';
 
 const files = [
   {
@@ -106,9 +106,11 @@ export default function FolderScreen({navigation}: any) {
         <Text style={styles.headerTitle}>Library</Text>
         <View style={styles.button}>
           <Image source={Star} />
-          <Text style={styles.text}>
-            Upgrade to get the most out of Scan Studio
-          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('MyScan')}>
+            <Text style={styles.text}>
+              Upgrade to get the most out of Scan Studio
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.listFolders}>
           {files.map((value, index) => (

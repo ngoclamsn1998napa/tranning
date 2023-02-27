@@ -1,45 +1,55 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Files from '../assets/Files.png';
 import FolderIcon from '../assets/folderIcon.png';
 import Pen from '../assets/pen.png';
 import Search from '../assets/search.png';
 import MidIcon from '../assets/tabMid.png';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FolderTab from './Tabs/FolderTab';
+
 const Tab = createBottomTabNavigator();
 
 import TabBarIcon from '../components/TabBarIcon';
 import TabBarScanQrIcon from '../components/TabBarScanQrIcon';
-import HomeScreen from './HomeScreen';
 import ScanScreen from './ScanScreen';
 import SearchScreen from './SearchScreen';
+import ScanTab from './Tabs/ScanTab';
 import ToolScreen from './ToolScreen';
 
 function MainContainer() {
+  const [sortBy, setSortBy] = useState('name');
+  const [showAs, setShowAs] = useState('icon');
+
   const screenOptions = {
     tabBarShowLabel: false,
     unmountOnBlur: true,
-    header: () => null,
     tabBarStyle: styles.tabBarStyle,
+    header: () => null,
+    title: '',
+  };
+
+  const scanProps = {
+    sortBy,
+    setSortBy,
+    showAs,
+    setShowAs,
   };
 
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Tab.Screen
-        name="Home"
+        name="MyScan"
         options={{
-          tabBarLabel: 'My scans',
           tabBarIcon: ({focused}) => TabBarIcon(focused, Files),
         }}
-        component={HomeScreen}
+        children={() => <ScanTab {...scanProps} />}
       />
       <Tab.Screen
         name="Folder"
         options={{
-          tabBarLabel: 'Library',
           tabBarIcon: ({focused}) => TabBarIcon(focused, FolderIcon),
         }}
         component={FolderTab}
@@ -54,7 +64,6 @@ function MainContainer() {
       <Tab.Screen
         name="Search"
         options={{
-          tabBarLabel: 'Search',
           tabBarIcon: ({focused}) => TabBarIcon(focused, Search),
         }}
         component={SearchScreen}
@@ -62,7 +71,6 @@ function MainContainer() {
       <Tab.Screen
         name="Tool"
         options={{
-          tabBarLabel: 'Tool',
           tabBarIcon: ({focused}) => TabBarIcon(focused, Pen),
         }}
         component={ToolScreen}

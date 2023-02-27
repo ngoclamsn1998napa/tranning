@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import fileLock from '../../assets/fileLock.png';
-import pdfFile from '../../assets/pdfFile.png';
+import fileLock from '../assets/fileLock.png';
+import pdfFile from '../assets/pdfFile.png';
 
 const files = [
   {
