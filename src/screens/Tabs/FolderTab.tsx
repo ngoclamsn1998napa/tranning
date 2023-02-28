@@ -7,6 +7,7 @@ import Setting from '../../assets/settings.png';
 
 import DetailsScreen from '../DetailsScreen';
 import FolderScreen from '../FolderScreen';
+import ViewPdf from '../ViewPdf';
 const SettingStack = createNativeStackNavigator();
 
 const HeaderRight = () => (
@@ -37,6 +38,14 @@ export default function FolderTab(props: any) {
         name="Details"
         options={{headerTitleAlign: 'center', title: 'Homework Documents'}}
         component={DetailsScreen}
+      />
+      <SettingStack.Screen
+        name="ViewPdf"
+        component={ViewPdf}
+        options={{
+          title: '',
+          headerRight: () => null,
+        }}
       />
     </SettingStack.Navigator>
   );

@@ -5,14 +5,17 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import DocumentPicker, {types} from 'react-native-document-picker';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import FilePlusIcon from '../assets/file-plus.png';
 import GridShowAs from '../assets/grid.png';
 import ImageIcon from '../assets/image.png';
 import ListShowAs from '../assets/list.png';
+import pdfFile from '../assets/pdfFile.png';
 import ScanBackGround from '../assets/scan-background.png';
 import SearchIcon from '../assets/search.png';
 import SelectedFileIcon from '../assets/Selected.png';
@@ -34,12 +37,56 @@ const fileAction = [
   {title: 'Import Files', key: 'import_file', src: FilePlusIcon},
 ];
 
-const MyScanScreen = ({sortBy, setSortBy, showAs, setShowAs}: any) => {
-  const [index, setIndex] = useState(1);
+const MyScanScreen = ({
+  sortBy,
+  setSortBy,
+  showAs,
+  setShowAs,
+  setFileUpload,
+}: any) => {
+  const [index, setIndex] = useState(2);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const snapPoints = useMemo(() => ['25%', '48%', '75%'], []);
+  const snapPoints = useMemo(() => ['5%', '25%', '48%', '75%'], []);
+
+  const formatDate = () => {
+    var d = new Date(),
+      dformat =
+        [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('/') +
+        ' ' +
+        [d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+    return dformat;
+  };
+
+  const selectFile = async (type: string) => {
+    const typesFile = type === 'import_photo' ? [types.images] : [types.pdf];
+    // const typeName = type === 'import_photo' ? 'image' : 'file';
+    try {
+      const doc = await DocumentPicker.pick({
+        presentationStyle: 'fullScreen',
+        type: typesFile,
+        allowMultiSelection: true,
+      });
+      const fileItem = doc.map(value => ({
+        id: Math.random(),
+        title: value.name,
+        uri: value.uri,
+        src: pdfFile,
+        description: '',
+        createdAt: formatDate(),
+        type: 'file',
+      }));
+      ToastAndroid.showWithGravityAndOffset(
+        'Select file is success!',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        50,
+      );
+      setFileUpload((prevState: any) => [...prevState, ...fileItem]);
+    } catch (error) {}
+  };
 
   const generationSortByButton = () => {
     return sortByList.map((value, i) => (
@@ -77,7 +124,8 @@ const MyScanScreen = ({sortBy, setSortBy, showAs, setShowAs}: any) => {
           styles.btnActionFile,
           i === fileAction.length - 1 ? styles.borderNone : null,
         ]}
-        key={i}>
+        key={i}
+        onPress={() => value?.key !== 'select_file' && selectFile(value?.key)}>
         <Image source={value.src} />
         <Text>{value.title}</Text>
       </TouchableOpacity>

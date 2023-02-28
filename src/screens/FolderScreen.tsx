@@ -12,116 +12,116 @@ import Swipeout from 'react-native-swipeout';
 import DeleteIcon from '../../assets/delete.png';
 import MoreIconWhite from '../../assets/more.png';
 import ShareIcon from '../../assets/share.png';
-import fileLock from '../assets/fileLock.png';
-import folder from '../assets/folder.png';
+// import fileLock from '../assets/fileLock.png';
+// import folder from '../assets/folder.png';
 import MoreIcon from '../assets/icMenu.png';
-import pdfFile from '../assets/pdfFile.png';
+// import pdfFile from '../assets/pdfFile.png';
 import Star from '../assets/star.png';
-const files = [
-  {
-    id: 1,
-    title: 'Homework Documents',
-    src: folder,
-    description: '3 items',
-    createdAt: '',
-    type: 'folder',
-  },
-  {
-    id: 2,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: pdfFile,
-    description: '',
-    createdAt: '10:43',
-    type: 'file',
-  },
-  {
-    id: 3,
-    title: 'Invoices Folder',
-    src: folder,
-    description: '5 items',
-    createdAt: '',
-    type: 'folder',
-  },
-  {
-    id: 4,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: fileLock,
-    description: '',
-    createdAt: '01/06/2021',
-    type: 'file',
-  },
-  {
-    id: 5,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: fileLock,
-    description: '',
-    createdAt: '01/06/2021',
-    type: 'file',
-  },
-  {
-    id: 6,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: fileLock,
-    description: '',
-    createdAt: '01/06/2021',
-    type: 'file',
-  },
-  {
-    id: 7,
-    title: 'Homework Documents',
-    src: folder,
-    description: '3 items',
-    createdAt: '',
-    type: 'folder',
-  },
-  {
-    id: 8,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: folder,
-    description: '',
-    createdAt: '10:43',
-    type: 'folder',
-  },
-  {
-    id: 9,
-    title: 'Invoices Folder',
-    src: folder,
-    description: '5 items',
-    createdAt: '',
-    type: 'folder',
-  },
-  {
-    id: 10,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: fileLock,
-    description: '',
-    createdAt: '01/06/2021',
-    type: 'file',
-  },
-  {
-    id: 11,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: pdfFile,
-    description: '',
-    createdAt: '01/06/2021',
-    type: 'file',
-  },
-  {
-    id: 12,
-    title: 'Scan 2021-06-01 10:43:50',
-    src: pdfFile,
-    description: '',
-    createdAt: '01/06/2021',
-    type: 'file',
-  },
-];
+// const files = [
+// {
+//   id: 1,
+//   title: 'Homework Documents',
+//   src: folder,
+//   description: '3 items',
+//   createdAt: '',
+//   type: 'folder',
+// },
+// {
+//   id: 2,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: pdfFile,
+//   description: '',
+//   createdAt: '10:43',
+//   type: 'file',
+// },
+// {
+//   id: 3,
+//   title: 'Invoices Folder',
+//   src: folder,
+//   description: '5 items',
+//   createdAt: '',
+//   type: 'folder',
+// },
+// {
+//   id: 4,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: fileLock,
+//   description: '',
+//   createdAt: '01/06/2021',
+//   type: 'file',
+// },
+// {
+//   id: 5,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: fileLock,
+//   description: '',
+//   createdAt: '01/06/2021',
+//   type: 'file',
+// },
+// {
+//   id: 6,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: fileLock,
+//   description: '',
+//   createdAt: '01/06/2021',
+//   type: 'file',
+// },
+// {
+//   id: 7,
+//   title: 'Homework Documents',
+//   src: folder,
+//   description: '3 items',
+//   createdAt: '',
+//   type: 'folder',
+// },
+// {
+//   id: 8,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: folder,
+//   description: '',
+//   createdAt: '10:43',
+//   type: 'folder',
+// },
+// {
+//   id: 9,
+//   title: 'Invoices Folder',
+//   src: folder,
+//   description: '5 items',
+//   createdAt: '',
+//   type: 'folder',
+// },
+// {
+//   id: 10,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: fileLock,
+//   description: '',
+//   createdAt: '01/06/2021',
+//   type: 'file',
+// },
+// {
+//   id: 11,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: pdfFile,
+//   description: '',
+//   createdAt: '01/06/2021',
+//   type: 'file',
+// },
+// {
+//   id: 12,
+//   title: 'Scan 2021-06-01 10:43:50',
+//   src: pdfFile,
+//   description: '',
+//   createdAt: '01/06/2021',
+//   type: 'file',
+// },
+// ];
 
 export default function FolderScreen(props: any) {
-  const {sortBy, showAs, navigation} = props;
+  const {showAs, navigation, fileUpload} = props;
 
-  const [listFileState, setListFileState] = React.useState(files);
+  const [listFileState, setListFileState] = React.useState(fileUpload);
 
-  const swipeoutBtns = user => [
+  const swipeoutBtns = (user: any) => [
     {
       backgroundColor: '#56627A',
       component: (
@@ -141,7 +141,7 @@ export default function FolderScreen(props: any) {
         </View>
       ),
       onPress: () => {
-        const data = listFileState.filter(value => value.id !== user.id);
+        const data = listFileState.filter((value: any) => value.id !== user.id);
         setListFileState(data);
       },
     },
@@ -176,13 +176,13 @@ export default function FolderScreen(props: any) {
               showAs === 'grid' ? styles.listFoldersColumn : null,
             ]}>
             {listFileState
-              .filter(value => {
+              .filter((value: any) => {
                 if (showAs === 'icon') {
                   return value;
                 }
                 return value.type === 'file';
               })
-              .map((value, index) => {
+              .map((value: any, index: number) => {
                 if (showAs === 'grid') {
                   return (
                     <Swipeout
@@ -195,15 +195,18 @@ export default function FolderScreen(props: any) {
                         <View style={styles.fileDetail}>
                           <Image source={value.src} />
                           <View style={styles.row}>
-                            <View style={styles.column}>
-                              <Text>
-                                {value?.description
-                                  ? value?.description
-                                  : value?.title}
-                              </Text>
-                              <Text>{value?.createdAt}</Text>
-                              <Text>PDF</Text>
-                            </View>
+                            <TouchableOpacity
+                              onPress={() => navigation.navigate('ViewPdf')}>
+                              <View style={styles.column}>
+                                <Text>
+                                  {value?.description
+                                    ? value?.description
+                                    : value?.title}
+                                </Text>
+                                <Text>{value?.createdAt}</Text>
+                                <Text>PDF</Text>
+                              </View>
+                            </TouchableOpacity>
                             <Image source={MoreIcon} />
                           </View>
                         </View>

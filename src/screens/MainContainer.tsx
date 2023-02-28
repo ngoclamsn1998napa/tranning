@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -22,6 +22,7 @@ import ToolScreen from './ToolScreen';
 function MainContainer({navigation}: any) {
   const [sortBy, setSortBy] = useState('name');
   const [showAs, setShowAs] = useState('icon');
+  const [fileUpload, setFileUpload] = useState([]);
 
   const screenOptions = {
     tabBarShowLabel: false,
@@ -36,7 +37,22 @@ function MainContainer({navigation}: any) {
     setSortBy,
     showAs,
     setShowAs,
+    fileUpload,
+    setFileUpload,
   };
+
+  useEffect(() => {
+    let dataAfterSort: any = [];
+    if (sortBy === 'name') {
+      dataAfterSort = fileUpload.sort();
+    }
+    if (sortBy === 'updated' || sortBy === 'created') {
+      dataAfterSort = fileUpload.sort(function (a: any, b: any) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+    }
+    setFileUpload(dataAfterSort);
+  }, [fileUpload, sortBy]);
 
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
