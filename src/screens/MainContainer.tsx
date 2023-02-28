@@ -19,7 +19,7 @@ import SearchScreen from './SearchScreen';
 import ScanTab from './Tabs/ScanTab';
 import ToolScreen from './ToolScreen';
 
-function MainContainer() {
+function MainContainer({navigation}: any) {
   const [sortBy, setSortBy] = useState('name');
   const [showAs, setShowAs] = useState('icon');
 
@@ -52,7 +52,7 @@ function MainContainer() {
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, FolderIcon),
         }}
-        component={FolderTab}
+        children={() => <FolderTab {...scanProps} />}
       />
       <Tab.Screen
         name="Scan"

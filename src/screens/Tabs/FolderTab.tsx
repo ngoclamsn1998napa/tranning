@@ -18,7 +18,7 @@ const HeaderRight = () => (
 
 const HeaderLeft = () => <Image source={Setting} />;
 
-export default function FolderTab() {
+export default function FolderTab(props: any) {
   return (
     <SettingStack.Navigator
       screenOptions={{
@@ -31,7 +31,7 @@ export default function FolderTab() {
           title: '',
           headerLeft: HeaderLeft,
         }}
-        component={FolderScreen}
+        children={propChildren => <FolderScreen {...propChildren} {...props} />}
       />
       <SettingStack.Screen
         name="Details"

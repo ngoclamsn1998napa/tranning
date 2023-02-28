@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import FilePlusIcon from '../assets/file-plus.png';
 import GridShowAs from '../assets/grid.png';
 import ImageIcon from '../assets/image.png';
@@ -94,46 +95,48 @@ const MyScanScreen = ({sortBy, setSortBy, showAs, setShowAs}: any) => {
 
   // renders
   return (
-    <BottomSheetModalProvider>
-      <View
-        style={[
-          styles.container,
-          index !== -1 ? styles.bottomSheetActive : null,
-        ]}>
-        <View style={styles.scanStyle}>
-          <Text style={styles.headerTitle}>My Scan</Text>
-          <View style={styles.searchInput}>
-            <Image style={styles.searchIconStyle} source={SearchIcon} />
-            <TextInput style={styles.input} placeholder="Search files" />
+    <GestureHandlerRootView>
+      <BottomSheetModalProvider>
+        <View
+          style={[
+            styles.container,
+            index !== -1 ? styles.bottomSheetActive : null,
+          ]}>
+          <View style={styles.scanStyle}>
+            <Text style={styles.headerTitle}>My Scan</Text>
+            <View style={styles.searchInput}>
+              <Image style={styles.searchIconStyle} source={SearchIcon} />
+              <TextInput style={styles.input} placeholder="Search files" />
+            </View>
+            <View style={styles.scanBackGround}>
+              <Image source={ScanBackGround} />
+            </View>
           </View>
-          <View style={styles.scanBackGround}>
-            <Image source={ScanBackGround} />
-          </View>
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            enableOverDrag
+            index={index}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}>
+            <View style={styles.sheetModal}>
+              <View>
+                <View>
+                  <Text>Sort By</Text>
+                  <View style={styles.sortBy}>{generationSortByButton()}</View>
+                </View>
+              </View>
+              <View>
+                <View>
+                  <Text>Show As</Text>
+                  <View style={styles.sortBy}>{generationShowAsButton()}</View>
+                </View>
+              </View>
+              <View style={styles.actionFile}>{generationActionFiles()}</View>
+            </View>
+          </BottomSheetModal>
         </View>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          enableOverDrag
-          index={index}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}>
-          <View style={styles.sheetModal}>
-            <View>
-              <View>
-                <Text>Sort By</Text>
-                <View style={styles.sortBy}>{generationSortByButton()}</View>
-              </View>
-            </View>
-            <View>
-              <View>
-                <Text>Show As</Text>
-                <View style={styles.sortBy}>{generationShowAsButton()}</View>
-              </View>
-            </View>
-            <View style={styles.actionFile}>{generationActionFiles()}</View>
-          </View>
-        </BottomSheetModal>
-      </View>
-    </BottomSheetModalProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 };
 
