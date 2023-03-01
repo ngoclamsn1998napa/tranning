@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {StyleSheet} from 'react-native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -7,7 +7,6 @@ import FolderIcon from '../assets/folderIcon.png';
 import Pen from '../assets/pen.png';
 import Search from '../assets/search.png';
 import MidIcon from '../assets/tabMid.png';
-
 import FolderTab from './Tabs/FolderTab';
 
 const Tab = createBottomTabNavigator();
@@ -18,19 +17,25 @@ import ScanScreen from './ScanScreen';
 import SearchScreen from './SearchScreen';
 import ScanTab from './Tabs/ScanTab';
 import ToolScreen from './ToolScreen';
-
-function MainContainer({navigation}: any) {
+function MainContainer(props: any) {
   const [sortBy, setSortBy] = useState('name');
   const [showAs, setShowAs] = useState('icon');
   const [fileUpload, setFileUpload] = useState([]);
+  const [activeTab, setActiveTab] = useState('home');
 
-  const screenOptions = {
-    tabBarShowLabel: false,
-    unmountOnBlur: true,
-    tabBarStyle: styles.tabBarStyle,
-    header: () => null,
-    title: '',
-  };
+  const screenOptions = useMemo(() => {
+    const newStyles = {
+      ...styles.tabBarStyle,
+      display: activeTab === 'home' ? 'none' : 'flex',
+    };
+    return {
+      tabBarShowLabel: false,
+      unmountOnBlur: true,
+      tabBarStyle: newStyles,
+      header: () => null,
+      title: '',
+    };
+  }, [activeTab]);
 
   const scanProps = {
     sortBy,
@@ -39,6 +44,7 @@ function MainContainer({navigation}: any) {
     setShowAs,
     fileUpload,
     setFileUpload,
+    setActiveTab,
   };
 
   useEffect(() => {
@@ -57,18 +63,30 @@ function MainContainer({navigation}: any) {
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Tab.Screen
-        name="MyScan"
+        name="Home"
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, Files),
         }}
         children={() => <ScanTab {...scanProps} />}
+        listeners={() => ({
+          tabPress: () => {
+            setActiveTab('home');
+          },
+        })}
       />
       <Tab.Screen
         name="Folder"
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, FolderIcon),
         }}
-        children={() => <FolderTab {...scanProps} />}
+        children={propsChildren => (
+          <FolderTab {...propsChildren} {...scanProps} />
+        )}
+        listeners={() => ({
+          tabPress: () => {
+            setActiveTab('folder');
+          },
+        })}
       />
       <Tab.Screen
         name="Scan"
@@ -76,6 +94,11 @@ function MainContainer({navigation}: any) {
           tabBarIcon: () => TabBarScanQrIcon(MidIcon),
         }}
         component={ScanScreen}
+        listeners={() => ({
+          tabPress: () => {
+            setActiveTab('scan');
+          },
+        })}
       />
       <Tab.Screen
         name="Search"
@@ -83,6 +106,11 @@ function MainContainer({navigation}: any) {
           tabBarIcon: ({focused}) => TabBarIcon(focused, Search),
         }}
         component={SearchScreen}
+        listeners={() => ({
+          tabPress: () => {
+            setActiveTab('search');
+          },
+        })}
       />
       <Tab.Screen
         name="Tool"
@@ -90,6 +118,11 @@ function MainContainer({navigation}: any) {
           tabBarIcon: ({focused}) => TabBarIcon(focused, Pen),
         }}
         component={ToolScreen}
+        listeners={() => ({
+          tabPress: () => {
+            setActiveTab('tool');
+          },
+        })}
       />
     </Tab.Navigator>
   );

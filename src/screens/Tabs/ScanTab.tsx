@@ -28,7 +28,9 @@ export default function ScanTab(props: any) {
           title: '',
           headerLeft: HeaderLeft,
         }}
-        children={() => <MyScanScreen {...props} />}
+        children={propsChildren => (
+          <MyScanScreen {...propsChildren} {...props} />
+        )}
       />
     </SettingStack.Navigator>
   );

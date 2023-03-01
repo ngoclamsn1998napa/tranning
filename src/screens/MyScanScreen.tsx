@@ -37,12 +37,33 @@ const fileAction = [
   {title: 'Import Files', key: 'import_file', src: FilePlusIcon},
 ];
 
+const generateUUID = () => {
+  var d = new Date().getTime(); //Timestamp
+  var d2 =
+    (typeof performance !== 'undefined' &&
+      performance.now &&
+      performance.now() * 1000) ||
+    0;
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16;
+    if (d > 0) {
+      r = (d + r) % 16 | 0;
+      d = Math.floor(d / 16);
+    } else {
+      r = (d2 + r) % 16 | 0;
+      d2 = Math.floor(d2 / 16);
+    }
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+};
+
 const MyScanScreen = ({
   sortBy,
   setSortBy,
   showAs,
   setShowAs,
   setFileUpload,
+  navigation,
 }: any) => {
   const [index, setIndex] = useState(2);
 
@@ -69,7 +90,7 @@ const MyScanScreen = ({
         allowMultiSelection: true,
       });
       const fileItem = doc.map(value => ({
-        id: Math.random(),
+        id: generateUUID(),
         title: value.name,
         uri: value.uri,
         src: pdfFile,
@@ -117,6 +138,14 @@ const MyScanScreen = ({
     ));
   };
 
+  const actionFilesEvent = (key: string) => {
+    if (key === 'select_file') {
+      navigation.navigate('Folder', {selectedFile: true});
+      return;
+    }
+    selectFile(key);
+  };
+
   const generationActionFiles = () => {
     return fileAction.map((value, i) => (
       <TouchableOpacity
@@ -125,7 +154,7 @@ const MyScanScreen = ({
           i === fileAction.length - 1 ? styles.borderNone : null,
         ]}
         key={i}
-        onPress={() => value?.key !== 'select_file' && selectFile(value?.key)}>
+        onPress={() => actionFilesEvent(value?.key)}>
         <Image source={value.src} />
         <Text>{value.title}</Text>
       </TouchableOpacity>

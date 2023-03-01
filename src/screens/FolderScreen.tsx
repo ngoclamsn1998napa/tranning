@@ -1,3 +1,4 @@
+import CheckBox from '@react-native-community/checkbox';
 import * as React from 'react';
 import {
   Image,
@@ -117,7 +118,18 @@ import Star from '../assets/star.png';
 // ];
 
 export default function FolderScreen(props: any) {
-  const {showAs, navigation, fileUpload} = props;
+  const {
+    showAs,
+    navigation,
+    fileUpload,
+    setFileUpload,
+    route,
+    toggleCheckBox,
+    setToggleCheckBox,
+    setActiveTab,
+  } = props;
+
+  const selectedFile = route?.params?.selectedFile;
 
   const [listFileState, setListFileState] = React.useState(fileUpload);
 
@@ -142,6 +154,7 @@ export default function FolderScreen(props: any) {
       ),
       onPress: () => {
         const data = listFileState.filter((value: any) => value.id !== user.id);
+        setFileUpload(data);
         setListFileState(data);
       },
     },
@@ -156,6 +169,31 @@ export default function FolderScreen(props: any) {
       onPress: () => {},
     },
   ];
+
+  const generateCheckBox = value => {
+    if (selectedFile) {
+      return (
+        <CheckBox
+          disabled={false}
+          value={toggleCheckBox.includes(value?.id)}
+          onValueChange={() => {
+            if (!toggleCheckBox.includes(value?.id)) {
+              setToggleCheckBox(prevState => [...prevState, value.id]);
+            } else {
+              setToggleCheckBox(
+                toggleCheckBox.filter(item => item !== value.id),
+              );
+            }
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
+  React.useEffect(() => {
+    setActiveTab('folder');
+  }, [setActiveTab]);
 
   return (
     <GestureHandlerRootView>
@@ -193,6 +231,7 @@ export default function FolderScreen(props: any) {
                       style={styles.swipeoutStyle}>
                       <View style={styles.fileContentRow} key={index}>
                         <View style={styles.fileDetail}>
+                          {generateCheckBox(value)}
                           <Image source={value.src} />
                           <View style={styles.row}>
                             <TouchableOpacity
