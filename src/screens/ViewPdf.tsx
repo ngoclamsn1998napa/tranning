@@ -1,8 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Pdf from 'react-native-pdf';
 
-const ViewPdf = () => {
+const ViewPdf = (props: any) => {
+  const setActiveTab = props?.setActiveTab;
+
+  useEffect(() => {
+    if (setActiveTab) {
+      setActiveTab('view-pdf');
+    }
+  }, [setActiveTab]);
   return (
     <View style={styles.container}>
       <Pdf

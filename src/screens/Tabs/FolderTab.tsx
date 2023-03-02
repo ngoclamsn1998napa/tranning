@@ -6,6 +6,7 @@ import FolderPlus from '../../assets/folderPlus.png';
 import IcMenu from '../../assets/icMenu.png';
 import Setting from '../../assets/settings.png';
 import DetailsScreen from '../DetailsScreen';
+import FolderAction from '../FolderAction';
 import FolderScreen from '../FolderScreen';
 import ViewPdf from '../ViewPdf';
 const SettingStack = createNativeStackNavigator();
@@ -14,12 +15,13 @@ export default function FolderTab(props: any) {
   const [toggleCheckBox, setToggleCheckBox] = React.useState([]);
   const selectedFile = props?.route?.params?.selectedFile;
   const ids = props?.fileUpload?.map((value: any) => value?.id);
-
+  const {setSelectedFileState} = props;
   const HeaderLeft = React.useCallback(() => {
     if (selectedFile) {
       return (
         <TouchableOpacity
           onPress={() => {
+            setSelectedFileState(false);
             if (ids?.length === toggleCheckBox?.length) {
               setToggleCheckBox([]);
             } else {
@@ -34,7 +36,7 @@ export default function FolderTab(props: any) {
       );
     }
     return <Image source={Setting} />;
-  }, [ids, selectedFile, toggleCheckBox?.length]);
+  }, [ids, selectedFile, setSelectedFileState, toggleCheckBox?.length]);
 
   const HeaderRight = React.useCallback(() => {
     if (selectedFile) {
@@ -52,7 +54,12 @@ export default function FolderTab(props: any) {
 
     return (
       <View style={styles.headerRight}>
-        <Image source={FolderPlus} />
+        <TouchableOpacity
+          onPress={() =>
+            props.navigation.navigate('FolderAction', {actionFolder: 'create'})
+          }>
+          <Image source={FolderPlus} />
+        </TouchableOpacity>
         <Image source={IcMenu} />
       </View>
     );
@@ -87,11 +94,21 @@ export default function FolderTab(props: any) {
       />
       <SettingStack.Screen
         name="ViewPdf"
-        component={ViewPdf}
+        children={propChildren => <ViewPdf {...propChildren} {...props} />}
         options={{
           title: '',
           headerRight: () => null,
         }}
+      />
+      <SettingStack.Screen
+        name="FolderAction"
+        options={{
+          title: '',
+          header: () => null,
+          presentation: 'modal',
+          headerShown: true,
+        }}
+        component={FolderAction}
       />
     </SettingStack.Navigator>
   );

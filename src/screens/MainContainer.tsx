@@ -1,14 +1,12 @@
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useMemo, useState} from 'react';
 import {StyleSheet} from 'react-native';
-
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Files from '../assets/Files.png';
 import FolderIcon from '../assets/folderIcon.png';
 import Pen from '../assets/pen.png';
 import Search from '../assets/search.png';
 import MidIcon from '../assets/tabMid.png';
 import FolderTab from './Tabs/FolderTab';
-
 const Tab = createBottomTabNavigator();
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -17,16 +15,20 @@ import ScanScreen from './ScanScreen';
 import SearchScreen from './SearchScreen';
 import ScanTab from './Tabs/ScanTab';
 import ToolScreen from './ToolScreen';
-function MainContainer(props: any) {
+function MainContainer() {
   const [sortBy, setSortBy] = useState('name');
   const [showAs, setShowAs] = useState('icon');
   const [fileUpload, setFileUpload] = useState([]);
   const [activeTab, setActiveTab] = useState('home');
+  const [selectedFileState, setSelectedFileState] = useState(false);
 
   const screenOptions = useMemo(() => {
     const newStyles = {
       ...styles.tabBarStyle,
-      display: activeTab === 'home' ? 'none' : 'flex',
+      display:
+        ['home', 'view-pdf'].includes(activeTab) || selectedFileState
+          ? 'none'
+          : 'flex',
     };
     return {
       tabBarShowLabel: false,
@@ -35,7 +37,7 @@ function MainContainer(props: any) {
       header: () => null,
       title: '',
     };
-  }, [activeTab]);
+  }, [activeTab, selectedFileState]);
 
   const scanProps = {
     sortBy,
@@ -45,6 +47,7 @@ function MainContainer(props: any) {
     fileUpload,
     setFileUpload,
     setActiveTab,
+    setSelectedFileState,
   };
 
   useEffect(() => {
@@ -79,11 +82,15 @@ function MainContainer(props: any) {
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, FolderIcon),
         }}
-        children={propsChildren => (
-          <FolderTab {...propsChildren} {...scanProps} />
-        )}
-        listeners={() => ({
+        children={propsChildren => {
+          const selectedFileParams =
+            propsChildren?.route?.params?.selectedFile || false;
+          setSelectedFileState(selectedFileParams);
+          return <FolderTab {...propsChildren} {...scanProps} />;
+        }}
+        listeners={({navigation}) => ({
           tabPress: () => {
+            navigation.navigate('Folder', {selectedFile: false});
             setActiveTab('folder');
           },
         })}

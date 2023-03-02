@@ -27,8 +27,8 @@ const sortByList = [
 ];
 
 const showAsList = [
-  {title: 'Icon', key: 'icon', src: ListShowAs},
-  {title: 'Grid', key: 'grid', src: GridShowAs},
+  {title: 'Icons', key: 'icon', src: GridShowAs},
+  {title: 'Grid', key: 'grid', src: ListShowAs},
 ];
 
 const fileAction = [
