@@ -1,28 +1,15 @@
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import FilePlusIcon from '../assets/file-plus.png';
-import GridShowAs from '../assets/grid.png';
-import ImageIcon from '../assets/image.png';
-import ListShowAs from '../assets/list.png';
-import SelectedFileIcon from '../assets/Selected.png';
-
-const sortByList = [
-  {title: 'Name', key: 'name'},
-  {title: 'Updated', key: 'updated'},
-  {title: 'Created', key: 'created'},
-];
-
-const showAsList = [
-  {title: 'Icons', key: 'icon', src: GridShowAs},
-  {title: 'Grid', key: 'grid', src: ListShowAs},
-];
-
-const fileAction = [
-  {title: 'Select Files', key: 'select_file', src: SelectedFileIcon},
-  {title: 'Import Photos', key: 'import_photo', src: ImageIcon},
-  {title: 'Import Files', key: 'import_file', src: FilePlusIcon},
-];
+import React, {useState} from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import FolderIcon from '../../assets/folder.png';
+import CreateFolder from '../../assets/pana.png';
+import ReNameFolder from '../../assets/Rename.png';
 
 const generateUUID = () => {
   var d = new Date().getTime(); //Timestamp
@@ -44,135 +31,132 @@ const generateUUID = () => {
   });
 };
 
+const formatDate = () => {
+  var d = new Date(),
+    dformat =
+      [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('/') +
+      ' ' +
+      [d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+  return dformat;
+};
+
 const FolderAction = ({
-  sortBy,
-  setSortBy,
-  showAs,
-  setShowAs,
-  setFileUpload,
+  setActiveTab,
   navigation,
+  setFileUpload,
+  actionFolder,
+  reNameObj,
 }: any) => {
-  const [index, setIndex] = useState(0);
+  const [inputNameValue, setInputValue] = useState('');
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  const snapPoints = useMemo(() => ['85%'], []);
-
-  const formatDate = () => {
-    var d = new Date(),
-      dformat =
-        [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('/') +
-        ' ' +
-        [d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
-    return dformat;
+  const reNameItem = (data: any) => {
+    return data.map((value: any) => {
+      if (value.id === reNameObj.id) {
+        return {
+          ...value,
+          title: inputNameValue,
+        };
+      }
+      return value;
+    });
   };
 
-  const handleSheetChanges = useCallback((i: number) => {
-    setIndex(() => i);
-    bottomSheetModalRef?.current?.snapToIndex(i);
-  }, []);
+  const actionFolderClick = () => {
+    if (actionFolder === 'create') {
+      const createFolder = {
+        id: generateUUID(),
+        title: inputNameValue,
+        uri: '',
+        src: FolderIcon,
+        description: '',
+        createdAt: formatDate(),
+        type: 'folder',
+      };
+      setFileUpload((prevState: any) => [...prevState, createFolder]);
+      navigation.navigate('FolderScreen');
+      return;
+    }
+    setFileUpload((prevState: any) => reNameItem(prevState));
+    navigation.navigate('FolderScreen');
+    return;
+  };
 
-  useEffect(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
+  React.useEffect(() => {
+    if (setActiveTab) {
+      setActiveTab('action-folder');
+    }
+  }, [setActiveTab]);
 
-  // renders
+  React.useEffect(() => {
+    if (reNameObj?.title) {
+      setInputValue(reNameObj.title);
+    }
+  }, [reNameObj]);
+
   return (
-    <View>
-      <Text>aa</Text>
+    <View style={styles.body}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate('FolderScreen')}>
+          <Text style={styles.textColor}>Cancel</Text>
+        </TouchableOpacity>
+        <Text style={styles.textTitle}>
+          {actionFolder === 'create' ? 'Create Folder' : 'ReName'}
+        </Text>
+        <TouchableOpacity onPress={() => actionFolderClick()}>
+          <Text style={styles.textColor}>Done</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.content}>
+        <View style={styles.nameFolder}>
+          <Image
+            source={actionFolder === 'create' ? CreateFolder : ReNameFolder}
+          />
+        </View>
+        <View>
+          <TextInput
+            style={styles.input}
+            onChangeText={setInputValue}
+            value={inputNameValue}
+          />
+        </View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scanStyle: {
-    height: '100%',
-    opacity: 0.7,
-  },
-  scanBackGround: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  headerTitle: {
-    fontWeight: 'bold',
-    fontSize: 30,
-    marginLeft: '5%',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  searchIconStyle: {
-    position: 'absolute',
-    marginTop: 10,
-    marginLeft: 10,
-  },
+  body: {backgroundColor: '#F2F2F2', height: '100%'},
   container: {
-    height: '100%',
-  },
-  bottomSheetActive: {
-    backgroundColor: '#949494',
-  },
-  sheetModal: {
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 20,
     display: 'flex',
-    rowGap: 20,
-    backgroundColor: '#F5F5F5',
-    height: '100%',
-  },
-  sortBy: {
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: '#dedede',
-    borderRadius: 10,
-    height: 30,
-    alignItems: 'center',
-    padding: 2,
-  },
-  activeSortBy: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    height: 22,
-  },
-  btnSortBy: {
-    flex: 1,
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    columnGap: 5,
-  },
-  actionFile: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
-  },
-  btnActionFile: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
     justifyContent: 'space-between',
-    height: 54,
-    borderBottomWidth: 1,
-    borderBottomColor: '#dedede',
-    padding: 16,
+    flexDirection: 'row',
+    margin: 16,
   },
-  borderNone: {
-    borderBottomWidth: 0,
+  textTitle: {
+    color: '#292D36',
+    fontSize: 17,
+    fontWeight: '500',
   },
-  searchInput: {
-    marginLeft: '5%',
-    marginRight: '5%',
+  textColor: {color: '#3377FF'},
+  content: {
+    display: 'flex',
+    margin: 16,
+    height: '80%',
+    justifyContent: 'center',
+  },
+  nameFolder: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   input: {
-    height: 40,
+    height: 48,
     borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 5,
-    color: 'black',
+    borderColor: 'white',
+    borderRadius: 10,
     paddingLeft: 50,
+    width: '100%',
+    backgroundColor: '#ffffff',
   },
 });
 

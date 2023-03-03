@@ -26,7 +26,8 @@ function MainContainer() {
     const newStyles = {
       ...styles.tabBarStyle,
       display:
-        ['home', 'view-pdf'].includes(activeTab) || selectedFileState
+        ['home', 'view-pdf', 'action-folder'].includes(activeTab) ||
+        selectedFileState
           ? 'none'
           : 'flex',
     };

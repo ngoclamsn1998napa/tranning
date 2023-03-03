@@ -15,7 +15,7 @@ const ViewPdf = (props: any) => {
       <Pdf
         trustAllCerts={false}
         source={{
-          uri: `http://samples.leanpub.com/thereactnativebook-sample.pdf`,
+          uri: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
           cache: true,
         }}
         style={styles.pdf}

@@ -52,7 +52,7 @@ export default function FolderScreen(props: any) {
 
   const selectedFile = route?.params?.selectedFile;
 
-  const [listFileState, setListFileState] = React.useState(fileUpload);
+  const [listFileState, setListFileState] = React.useState([]);
 
   const swipeoutBtns = (user: any) => [
     {
@@ -87,7 +87,12 @@ export default function FolderScreen(props: any) {
           <Text style={styles.textColorWhite}>ReName</Text>
         </View>
       ),
-      onPress: () => {},
+      onPress: () => {
+        navigation.navigate('ActionFolder', {
+          actionFolder: 'reName',
+          reNameObj: user,
+        });
+      },
     },
   ];
 
@@ -195,6 +200,13 @@ export default function FolderScreen(props: any) {
   };
 
   React.useEffect(() => {
+    if (fileUpload?.length) {
+      setListFileState(fileUpload);
+      setActiveTab('folder');
+    }
+  }, [fileUpload]);
+
+  React.useEffect(() => {
     setActiveTab('folder');
   }, [setActiveTab]);
 
@@ -221,12 +233,12 @@ export default function FolderScreen(props: any) {
                 showAs === 'grid' ? styles.listFoldersColumn : null,
               ]}>
               {listFileState
-                .filter((value: any) => {
-                  if (showAs === 'icon') {
-                    return value;
-                  }
-                  return value.type === 'file';
-                })
+                // .filter((value: any) => {
+                //   if (showAs === 'icon') {
+                //     return value;
+                //   }
+                //   return value.type === 'file';
+                // })
                 .map((value: any, index: number) => {
                   if (showAs === 'grid') {
                     return (
@@ -242,7 +254,12 @@ export default function FolderScreen(props: any) {
                             <Image source={value.src} />
                             <View style={styles.row}>
                               <TouchableOpacity
-                                onPress={() => navigation.navigate('ViewPdf')}>
+                                onPress={() => {
+                                  if (value.type === 'folder') {
+                                    return navigation.navigate('Details');
+                                  }
+                                  navigation.navigate('ViewPdf');
+                                }}>
                                 <View style={styles.column}>
                                   <Text>
                                     {value?.description
@@ -284,8 +301,11 @@ export default function FolderScreen(props: any) {
                       <View style={styles.fileContent} key={index}>
                         {generateItemShowAs(value, value.src)}
                         <TouchableOpacity
-                          onPress={() => navigation.navigate('ViewPdf')}>
-                          <Text>{value?.title}</Text>
+                          onPress={() =>
+                            value?.type !== 'folder' &&
+                            navigation.navigate('ViewPdf')
+                          }>
+                          <Text style={styles.textCenter}>{value?.title}</Text>
                           <Text>
                             {value?.description
                               ? value?.description
@@ -310,6 +330,7 @@ const styles = StyleSheet.create({
   height100: {
     height: '100%',
   },
+  textCenter: {textAlign: 'center'},
   bottomSheet: {
     position: 'absolute',
     bottom: 0,

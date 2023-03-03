@@ -16,6 +16,7 @@ export default function FolderTab(props: any) {
   const selectedFile = props?.route?.params?.selectedFile;
   const ids = props?.fileUpload?.map((value: any) => value?.id);
   const {setSelectedFileState} = props;
+
   const HeaderLeft = React.useCallback(() => {
     if (selectedFile) {
       return (
@@ -56,7 +57,7 @@ export default function FolderTab(props: any) {
       <View style={styles.headerRight}>
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('FolderAction', {actionFolder: 'create'})
+            props.navigation.navigate('ActionFolder', {actionFolder: 'create'})
           }>
           <Image source={FolderPlus} />
         </TouchableOpacity>
@@ -101,14 +102,23 @@ export default function FolderTab(props: any) {
         }}
       />
       <SettingStack.Screen
-        name="FolderAction"
+        name="ActionFolder"
         options={{
           title: '',
           header: () => null,
           presentation: 'modal',
           headerShown: true,
         }}
-        component={FolderAction}
+        children={propChildren => {
+          return (
+            <FolderAction
+              {...propChildren}
+              {...props}
+              actionFolder={propChildren?.route?.params?.actionFolder}
+              reNameObj={propChildren?.route?.params?.reNameObj}
+            />
+          );
+        }}
       />
     </SettingStack.Navigator>
   );
