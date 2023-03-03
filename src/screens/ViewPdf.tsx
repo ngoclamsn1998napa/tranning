@@ -9,6 +9,7 @@ const ViewPdf = (props: any) => {
     if (setActiveTab) {
       setActiveTab('view-pdf');
     }
+    return () => setActiveTab('FolderScreen');
   }, [setActiveTab]);
   return (
     <View style={styles.container}>
