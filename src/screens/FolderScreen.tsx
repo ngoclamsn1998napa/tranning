@@ -213,7 +213,11 @@ export default function FolderScreen(props: any) {
   return (
     <GestureHandlerRootView>
       <View style={styles.height100}>
-        <ScrollView style={styles.scrollView}>
+        <ScrollView
+          style={[
+            styles.scrollView,
+            +selectedFile ? styles.marginBottom100 : styles.marginBottom10,
+          ]}>
           <View>
             <Text style={styles.headerTitle}>Library</Text>
             {(!+selectedFile && (
@@ -330,7 +334,12 @@ const styles = StyleSheet.create({
     width: '90%',
     marginLeft: '5%',
     height: '100%',
+  },
+  marginBottom100: {
     marginBottom: 100,
+  },
+  marginBottom10: {
+    marginBottom: 10,
   },
   height100: {
     height: '100%',
