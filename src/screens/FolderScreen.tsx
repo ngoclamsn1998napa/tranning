@@ -326,7 +326,12 @@ export default function FolderScreen(props: any) {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {width: '90%', marginLeft: '5%', height: '100%'},
+  scrollView: {
+    width: '90%',
+    marginLeft: '5%',
+    height: '100%',
+    marginBottom: 100,
+  },
   height100: {
     height: '100%',
   },
