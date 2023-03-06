@@ -62,6 +62,9 @@ const FolderAction = ({
   };
 
   const actionFolderClick = () => {
+    if (!inputNameValue) {
+      return;
+    }
     if (actionFolder === 'create') {
       const createFolder = {
         id: generateUUID(),
@@ -85,6 +88,7 @@ const FolderAction = ({
     if (setActiveTab) {
       setActiveTab('action-folder');
     }
+    return () => setActiveTab('FolderScreen');
   }, [setActiveTab]);
 
   React.useEffect(() => {
@@ -118,6 +122,9 @@ const FolderAction = ({
             onChangeText={setInputValue}
             value={inputNameValue}
           />
+          <Text style={styles.colorError}>
+            {!inputNameValue && 'Tên folder không được để trống'}
+          </Text>
         </View>
       </View>
     </View>
@@ -130,7 +137,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    margin: 16,
+    backgroundColor: '#ffffff',
+    height: 60,
+    paddingLeft: 16,
+    paddingRight: 16,
+    alignItems: 'center',
+    borderBottomColor: '#F2F2F2',
+    borderBottomWidth: 1,
   },
   textTitle: {
     color: '#292D36',
@@ -157,6 +170,9 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     width: '100%',
     backgroundColor: '#ffffff',
+  },
+  colorError: {
+    color: 'red',
   },
 });
 
