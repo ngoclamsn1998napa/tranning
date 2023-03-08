@@ -1,3 +1,8 @@
 import {Text} from 'react-native';
-const SearchScreen = () => <Text>SearchScreen</Text>;
+import BottomSheetWrap from '../components/BottomSheetWrap';
+const SearchScreen = () => (
+  <BottomSheetWrap>
+    <Text>SearchScreen</Text>
+  </BottomSheetWrap>
+);
 export default SearchScreen;

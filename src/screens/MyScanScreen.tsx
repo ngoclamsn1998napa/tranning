@@ -1,311 +1,365 @@
-import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import DocumentPicker, {types} from 'react-native-document-picker';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import FilePlusIcon from '../assets/file-plus.png';
-import GridShowAs from '../assets/grid.png';
-import ImageIcon from '../assets/image.png';
-import ListShowAs from '../assets/list.png';
-import pdfFile from '../assets/pdfFile.png';
+import Swipeout from 'react-native-swipeout';
+import {ThemeContext} from '../../App';
+import DeleteIcon from '../../assets/delete.png';
+import MoreIconWhite from '../../assets/more.png';
+import ShareIcon from '../../assets/share.png';
+import fileSmall from '../assets/fileSmall.png';
+import MoreIcon from '../assets/icMenu.png';
 import ScanBackGround from '../assets/scan-background.png';
 import SearchIcon from '../assets/search.png';
-import SelectedFileIcon from '../assets/Selected.png';
+import BottomSheetWrap from '../components/BottomSheetWrap';
+const MyScanScreen = () => {
+  const [textSearch, setTextSearch] = useState<any>('');
+  const [fileData, setFileData] = useState<any>([]);
+  const {fileUpload = [], setFileUpload} = React.useContext(ThemeContext);
+  const navigation = useNavigation();
 
-const sortByList = [
-  {title: 'Name', key: 'name'},
-  {title: 'Updated', key: 'updated'},
-  {title: 'Created', key: 'created'},
-];
+  const swipeoutBtns = (user: any) => [
+    {
+      backgroundColor: '#56627A',
+      component: (
+        <View style={styles.centerIcon}>
+          <Image source={MoreIconWhite} />
+          <Text style={styles.textColorWhite}>More</Text>
+        </View>
+      ),
+      onPress: () => {},
+    },
+    {
+      backgroundColor: '#E94242',
+      component: (
+        <View style={styles.centerIcon}>
+          <Image source={DeleteIcon} />
+          <Text style={styles.textColorWhite}>Delete</Text>
+        </View>
+      ),
+      onPress: () => {
+        const data = fileUpload.filter((value: any) => value.id !== user.id);
+        setFileUpload(data);
+      },
+    },
+    {
+      backgroundColor: '#3377FF',
+      component: (
+        <View style={styles.centerIcon}>
+          <Image source={ShareIcon} />
+          <Text style={styles.textColorWhite}>ReName</Text>
+        </View>
+      ),
+      onPress: () => {
+        navigation.navigate('ActionFolder', {
+          actionFolder: 'reName',
+          reNameObj: user,
+        });
+      },
+    },
+  ];
 
-const showAsList = [
-  {title: 'Icons', key: 'icon', src: GridShowAs},
-  {title: 'Grid', key: 'grid', src: ListShowAs},
-];
-
-const fileAction = [
-  {title: 'Select Files', key: 'select_file', src: SelectedFileIcon},
-  {title: 'Import Photos', key: 'import_photo', src: ImageIcon},
-  {title: 'Import Files', key: 'import_file', src: FilePlusIcon},
-];
-
-const generateUUID = () => {
-  var d = new Date().getTime(); //Timestamp
-  var d2 =
-    (typeof performance !== 'undefined' &&
-      performance.now &&
-      performance.now() * 1000) ||
-    0;
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16;
-    if (d > 0) {
-      r = (d + r) % 16 | 0;
-      d = Math.floor(d / 16);
-    } else {
-      r = (d2 + r) % 16 | 0;
-      d2 = Math.floor(d2 / 16);
-    }
-    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
-};
-
-const MyScanScreen = ({
-  sortBy,
-  setSortBy,
-  showAs,
-  setShowAs,
-  setFileUpload,
-  navigation,
-}: any) => {
-  const [index, setIndex] = useState(2);
-
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  const snapPoints = useMemo(() => ['5%', '25%', '48%', '75%'], []);
-
-  const formatDate = () => {
-    var d = new Date(),
-      dformat =
-        [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('/') +
-        ' ' +
-        [d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
-    return dformat;
-  };
-
-  const selectFile = async (type: string) => {
-    const typesFile = type === 'import_photo' ? [types.images] : [types.pdf];
-    // const typeName = type === 'import_photo' ? 'image' : 'file';
-    try {
-      const doc = await DocumentPicker.pick({
-        presentationStyle: 'fullScreen',
-        type: typesFile,
-        allowMultiSelection: true,
-      });
-      const fileItem = doc.map(value => ({
-        id: generateUUID(),
-        title: value.name,
-        uri: value.uri,
-        src: pdfFile,
-        description: '',
-        createdAt: formatDate(),
-        type: 'file',
-      }));
-      ToastAndroid.showWithGravityAndOffset(
-        'Select file is success!',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        50,
+  const generateFile = () => {
+    const files = fileData?.filter((value: any) => value.type !== 'folder');
+    if (!files?.length) {
+      return (
+        <View style={styles.scanBackGround}>
+          <Image source={ScanBackGround} />
+        </View>
       );
-      setFileUpload((prevState: any) => [...prevState, ...fileItem]);
-    } catch (error) {}
-  };
-
-  const generationSortByButton = () => {
-    return sortByList.map((value, i) => (
-      <TouchableOpacity
-        style={[
-          styles.btnSortBy,
-          sortBy === value.key ? styles.activeSortBy : null,
-        ]}
-        onPress={() => setSortBy(value.key)}
-        key={i}>
-        <Text>{value.title}</Text>
-      </TouchableOpacity>
-    ));
-  };
-
-  const generationShowAsButton = () => {
-    return showAsList.map((value, i) => (
-      <TouchableOpacity
-        style={[
-          styles.btnSortBy,
-          showAs === value.key ? styles.activeSortBy : null,
-        ]}
-        onPress={() => setShowAs(value.key)}
-        key={i}>
-        <Image source={value.src} />
-        <Text>{value.title}</Text>
-      </TouchableOpacity>
-    ));
-  };
-
-  const actionFilesEvent = (key: string) => {
-    if (key === 'select_file') {
-      navigation.navigate('Folder', {selectedFile: true});
-      return;
     }
-    selectFile(key);
-  };
-
-  const generationActionFiles = () => {
-    return fileAction.map((value, i) => (
-      <TouchableOpacity
-        style={[
-          styles.btnActionFile,
-          i === fileAction.length - 1 ? styles.borderNone : null,
-        ]}
-        key={i}
-        onPress={() => actionFilesEvent(value?.key)}>
-        <Image source={value.src} />
-        <Text>{value.title}</Text>
-      </TouchableOpacity>
-    ));
-  };
-
-  const handleSheetChanges = useCallback((i: number) => {
-    setIndex(() => i);
-    bottomSheetModalRef?.current?.snapToIndex(i);
-  }, []);
-
-  useEffect(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
-  // renders
-  return (
-    <GestureHandlerRootView>
-      <BottomSheetModalProvider>
-        <View
-          style={[
-            styles.container,
-            index !== -1 ? styles.bottomSheetActive : null,
-          ]}>
-          <View style={styles.scanStyle}>
-            <Text style={styles.headerTitle}>My Scan</Text>
-            <View style={styles.searchInput}>
-              <Image style={styles.searchIconStyle} source={SearchIcon} />
-              <TextInput style={styles.input} placeholder="Search files" />
-            </View>
-            <View style={styles.scanBackGround}>
-              <Image source={ScanBackGround} />
+    return (
+      <View style={styles.height100}>
+        <ScrollView style={[styles.scrollView]}>
+          <View>
+            <View style={[styles.listFolders]}>
+              {files?.map((value: any, index: number) => {
+                return (
+                  <Swipeout
+                    rowIndex={index}
+                    sectionId={0}
+                    autoClose={true}
+                    right={swipeoutBtns(value)}
+                    style={styles.swipeoutStyle}>
+                    <View style={styles.fileContentRow} key={index}>
+                      <View style={styles.fileDetail}>
+                        <Image
+                          source={fileSmall}
+                          style={styles.fileSmallStyle}
+                        />
+                        <View style={styles.row}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              // if (value.type === 'folder') {
+                              //   return navigation.navigate('Details');
+                              // }
+                              // navigation.navigate('ViewPdf');
+                            }}>
+                            <View style={styles.column}>
+                              <Text style={styles.titleText}>
+                                {value?.description
+                                  ? value?.description
+                                  : value?.title}
+                              </Text>
+                              <Text style={styles.descriptionText}>
+                                {value?.createdAt}
+                              </Text>
+                              {value.format === 'pdf' ? (
+                                <View style={styles.badeg}>
+                                  <Text style={styles.badegText}>PDF</Text>
+                                </View>
+                              ) : (
+                                <Text style={styles.descriptionText}>
+                                  Image
+                                </Text>
+                              )}
+                            </View>
+                          </TouchableOpacity>
+                          <Image
+                            source={MoreIcon}
+                            style={styles.moreIconStyle}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </Swipeout>
+                );
+              })}
             </View>
           </View>
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            enableOverDrag
-            index={index}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}>
-            <View style={styles.sheetModal}>
-              <View>
-                <View>
-                  <Text>Sort By</Text>
-                  <View style={styles.sortBy}>{generationSortByButton()}</View>
-                </View>
-              </View>
-              <View>
-                <View>
-                  <Text>Show As</Text>
-                  <View style={styles.sortBy}>{generationShowAsButton()}</View>
-                </View>
-              </View>
-              <View style={styles.actionFile}>{generationActionFiles()}</View>
-            </View>
-          </BottomSheetModal>
+        </ScrollView>
+      </View>
+    );
+  };
+
+  const handleFilterNameFile = () => {
+    const data = fileUpload.filter(
+      (value: any) =>
+        value.type !== 'folder' && value.title.includes(textSearch),
+    );
+    setFileData(data);
+  };
+
+  useEffect(() => {
+    setFileData(fileUpload);
+  }, [fileUpload]);
+
+  return (
+    <BottomSheetWrap>
+      <View style={styles.scanStyle}>
+        <Text style={styles.headerTitle}>My Scans</Text>
+        <View style={styles.searchInput}>
+          <Image style={styles.searchIconStyle} source={SearchIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Search files"
+            onSubmitEditing={handleFilterNameFile}
+            onChangeText={setTextSearch}
+          />
         </View>
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+        {generateFile()}
+      </View>
+    </BottomSheetWrap>
   );
 };
 
 const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 15,
+    color: '#000000',
+    fontFamily: 'SF-Pro-Display-Light',
+  },
+  fileSmallStyle: {
+    width: 50,
+  },
+  descriptionText: {
+    color: '#000000',
+    fontFamily: 'SF-Pro-Display-Light',
+  },
+  badeg: {
+    width: 32,
+    height: 16,
+    backgroundColor: '#EB5757',
+    borderRadius: 4,
+    justifyContent: 'center',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  badegText: {
+    fontSize: 9,
+    color: '#ffffff',
+  },
+  moreIconStyle: {
+    width: 22,
+    marginRight: 5,
+  },
   scanStyle: {
     height: '100%',
-    opacity: 0.7,
   },
   scanBackGround: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
+    height: '70%',
   },
   headerTitle: {
-    fontWeight: 'bold',
     fontSize: 30,
     marginLeft: '5%',
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 10,
+    marginBottom: 10,
+    fontFamily: 'SF-Pro-Display-Semibold',
+    color: '#000000',
   },
   searchIconStyle: {
     position: 'absolute',
     marginTop: 10,
-    marginLeft: 10,
-  },
-  container: {
-    height: '100%',
-  },
-  bottomSheetActive: {
-    backgroundColor: '#949494',
-  },
-  sheetModal: {
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 20,
-    display: 'flex',
-    rowGap: 20,
-    backgroundColor: '#F5F5F5',
-    height: '100%',
-  },
-  sortBy: {
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: '#dedede',
-    borderRadius: 10,
-    height: 30,
-    alignItems: 'center',
-    padding: 2,
-  },
-  activeSortBy: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    height: 22,
-  },
-  btnSortBy: {
-    flex: 1,
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    columnGap: 5,
-  },
-  actionFile: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
-  },
-  btnActionFile: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
-    height: 54,
-    borderBottomWidth: 1,
-    borderBottomColor: '#dedede',
-    padding: 16,
-  },
-  borderNone: {
-    borderBottomWidth: 0,
+    marginLeft: 15,
+    zIndex: 111,
   },
   searchInput: {
     marginLeft: '5%',
     marginRight: '5%',
   },
   input: {
-    height: 40,
+    height: 44,
     borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 5,
-    color: 'black',
+    borderColor: '#E0E0E0',
+    borderRadius: 10,
     paddingLeft: 50,
+    backgroundColor: '#F8F8F8',
+    color: '#5C6068',
+    fontSize: 17,
+    fontFamily: 'SF-Pro-Display-Regular',
+    lineHeight: 22,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  scrollView: {
+    width: '95%',
+    height: '100%',
+    marginBottom: 120,
+  },
+  marginBottom10: {
+    marginBottom: 10,
+  },
+  height100: {
+    height: '100%',
+    width: '100%',
+  },
+  textCenter: {textAlign: 'center'},
+  bottomSheet: {
+    position: 'absolute',
+    bottom: 0,
+    height: 85,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    backgroundColor: '#ffffff',
+    shadowColor: '#000000',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 0,
+    },
+  },
+  button: {
+    width: '90%',
+    marginLeft: '5%',
+    marginTop: 20,
+    backgroundColor: '#33A9FF',
+    borderRadius: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    columnGap: 10,
+    alignItems: 'center',
+    height: 44,
+  },
+  text: {
+    color: '#FFFFFF',
+  },
+  fileContent: {
+    flexDirection: 'column',
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fileContentRow: {
+    flexDirection: 'column',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    paddingLeft: 20,
+  },
+  fileDetail: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 10,
+    width: '100%',
+  },
+  listFolders: {
+    marginTop: 20,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    rowGap: 20,
+  },
+  listFoldersColumn: {
+    flexDirection: 'column',
+  },
+  item: {
+    flexBasis: '33.3%',
+  },
+
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+  },
+  rightAction: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+    columnGap: 10,
+  },
+  moreIcon: {
+    height: '100%',
+    width: 80,
+    backgroundColor: '#56627A',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  swipeoutStyle: {
+    backgroundColor: 'transparent',
+    width: '100%',
+  },
+  centerIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+  },
+  textColorWhite: {
+    color: '#ffffff',
   },
 });
 

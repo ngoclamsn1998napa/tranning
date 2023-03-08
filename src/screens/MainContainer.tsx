@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {StyleSheet} from 'react-native';
 import Files from '../assets/Files.png';
 import FolderIcon from '../assets/folderIcon.png';
@@ -9,28 +9,29 @@ import MidIcon from '../assets/tabMid.png';
 import FolderTab from './Tabs/FolderTab';
 const Tab = createBottomTabNavigator();
 
+import {ThemeContext} from '../../App';
 import TabBarIcon from '../components/TabBarIcon';
 import TabBarScanQrIcon from '../components/TabBarScanQrIcon';
 import ScanScreen from './ScanScreen';
 import SearchScreen from './SearchScreen';
 import ScanTab from './Tabs/ScanTab';
 import ToolScreen from './ToolScreen';
+
 function MainContainer() {
-  const [sortBy, setSortBy] = useState('name');
-  const [showAs, setShowAs] = useState('icon');
-  const [fileUpload, setFileUpload] = useState([]);
-  const [activeTab, setActiveTab] = useState('home');
-  const [selectedFileState, setSelectedFileState] = useState(false);
+  const {
+    sortBy,
+    fileUpload,
+    setFileUpload,
+    setSelectedFileState,
+    hiddenBottomTab,
+  } = React.useContext(ThemeContext);
 
   const screenOptions = useMemo(() => {
     const newStyles = {
       ...styles.tabBarStyle,
-      display:
-        ['home', 'view-pdf', 'action-folder'].includes(activeTab) ||
-        selectedFileState
-          ? 'none'
-          : 'flex',
+      display: hiddenBottomTab ? 'none' : 'flex',
     };
+
     return {
       tabBarShowLabel: false,
       unmountOnBlur: true,
@@ -38,18 +39,7 @@ function MainContainer() {
       header: () => null,
       title: '',
     };
-  }, [activeTab, selectedFileState]);
-
-  const scanProps = {
-    sortBy,
-    setSortBy,
-    showAs,
-    setShowAs,
-    fileUpload,
-    setFileUpload,
-    setActiveTab,
-    setSelectedFileState,
-  };
+  }, [hiddenBottomTab]);
 
   useEffect(() => {
     let dataAfterSort: any = [];
@@ -71,12 +61,7 @@ function MainContainer() {
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, Files),
         }}
-        children={() => <ScanTab {...scanProps} />}
-        listeners={() => ({
-          tabPress: () => {
-            setActiveTab('home');
-          },
-        })}
+        children={() => <ScanTab />}
       />
       <Tab.Screen
         name="Folder"
@@ -87,14 +72,8 @@ function MainContainer() {
           const selectedFileParams =
             propsChildren?.route?.params?.selectedFile || false;
           setSelectedFileState(selectedFileParams);
-          return <FolderTab {...propsChildren} {...scanProps} />;
+          return <FolderTab {...propsChildren} />;
         }}
-        listeners={({navigation}) => ({
-          tabPress: () => {
-            navigation.navigate('Folder', {selectedFile: false});
-            setActiveTab('folder');
-          },
-        })}
       />
       <Tab.Screen
         name="Scan"
@@ -102,11 +81,6 @@ function MainContainer() {
           tabBarIcon: () => TabBarScanQrIcon(MidIcon),
         }}
         component={ScanScreen}
-        listeners={() => ({
-          tabPress: () => {
-            setActiveTab('scan');
-          },
-        })}
       />
       <Tab.Screen
         name="Search"
@@ -114,11 +88,6 @@ function MainContainer() {
           tabBarIcon: ({focused}) => TabBarIcon(focused, Search),
         }}
         component={SearchScreen}
-        listeners={() => ({
-          tabPress: () => {
-            setActiveTab('search');
-          },
-        })}
       />
       <Tab.Screen
         name="Tool"
@@ -126,11 +95,6 @@ function MainContainer() {
           tabBarIcon: ({focused}) => TabBarIcon(focused, Pen),
         }}
         component={ToolScreen}
-        listeners={() => ({
-          tabPress: () => {
-            setActiveTab('tool');
-          },
-        })}
       />
     </Tab.Navigator>
   );

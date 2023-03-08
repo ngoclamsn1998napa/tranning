@@ -10,13 +10,17 @@ import {
 } from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Swipeout from 'react-native-swipeout';
+import {ThemeContext} from '../../App';
 import CopyIcon from '../../assets/copy.png';
 import DeleteIcon from '../../assets/delete.png';
 import MoreIconWhite from '../../assets/more.png';
 import ShareIcon from '../../assets/share.png';
 import DeleteBlackIcon from '../../assets/trashBlack.png';
+import fileSmall from '../assets/fileSmall.png';
+import folderIcon from '../assets/folder.png';
 import MoreIcon from '../assets/icMenu.png';
 import Star from '../assets/star.png';
+import BottomSheetWrap from '../components/BottomSheetWrap';
 
 const generateUUID = () => {
   var d = new Date().getTime(); //Timestamp
@@ -39,16 +43,10 @@ const generateUUID = () => {
 };
 
 export default function FolderScreen(props: any) {
-  const {
-    showAs,
-    navigation,
-    fileUpload,
-    setFileUpload,
-    route,
-    toggleCheckBox,
-    setToggleCheckBox,
-    setActiveTab,
-  } = props;
+  const {navigation, route, toggleCheckBox, setToggleCheckBox} = props;
+
+  const {showAs, fileUpload, setFileUpload, setActiveTab} =
+    React.useContext(ThemeContext);
 
   const selectedFile = route?.params?.selectedFile;
 
@@ -212,38 +210,35 @@ export default function FolderScreen(props: any) {
 
   return (
     <GestureHandlerRootView>
-      <View style={styles.height100}>
-        <ScrollView
-          style={[
-            styles.scrollView,
-            +selectedFile ? styles.marginBottom100 : styles.marginBottom10,
-          ]}>
-          <View>
-            <Text style={styles.headerTitle}>Library</Text>
-            {(!+selectedFile && (
-              <View style={styles.button}>
-                <Image source={Star} />
-                <TouchableOpacity onPress={() => navigation.navigate('MyScan')}>
-                  <Text style={styles.text}>
-                    Upgrade to get the most out of Scan Studio
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )) ||
-              null}
-            <View
-              style={[
-                styles.listFolders,
-                showAs === 'grid' ? styles.listFoldersColumn : null,
-              ]}>
-              {listFileState
-                // .filter((value: any) => {
-                //   if (showAs === 'icon') {
-                //     return value;
-                //   }
-                //   return value.type === 'file';
-                // })
-                .map((value: any, index: number) => {
+      <BottomSheetWrap>
+        <View style={styles.height100}>
+          <ScrollView
+            style={[
+              styles.scrollView,
+              +selectedFile ? styles.marginBottom100 : styles.marginBottom10,
+            ]}>
+            <View>
+              <Text style={styles.headerTitle}>Library</Text>
+              {(!+selectedFile && (
+                <View style={styles.button}>
+                  <View style={styles.starStyle}>
+                    <Image source={Star} />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('MyScan')}>
+                    <Text style={styles.text}>
+                      Upgrade to get the most out of Scan Studio
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )) ||
+                null}
+              <View
+                style={[
+                  styles.listFolders,
+                  showAs === 'grid' ? styles.listFoldersColumn : null,
+                ]}>
+                {listFileState.map((value: any, index: number) => {
                   if (showAs === 'grid') {
                     return (
                       <Swipeout
@@ -255,7 +250,12 @@ export default function FolderScreen(props: any) {
                         <View style={styles.fileContentRow} key={index}>
                           <View style={styles.fileDetail}>
                             {generateCheckBox(value)}
-                            <Image source={value.src} />
+                            <Image
+                              source={
+                                value.type === 'folder' ? folderIcon : fileSmall
+                              }
+                              style={styles.fileSmallStyle}
+                            />
                             <View style={styles.row}>
                               <TouchableOpacity
                                 onPress={() => {
@@ -265,13 +265,23 @@ export default function FolderScreen(props: any) {
                                   navigation.navigate('ViewPdf');
                                 }}>
                                 <View style={styles.column}>
-                                  <Text>
+                                  <Text style={styles.titleText}>
                                     {value?.description
                                       ? value?.description
                                       : value?.title}
                                   </Text>
-                                  <Text>{value?.createdAt}</Text>
-                                  <Text>PDF</Text>
+                                  <Text style={styles.descriptionText}>
+                                    {value?.createdAt}
+                                  </Text>
+                                  {value.format === 'pdf' ? (
+                                    <View style={styles.badeg}>
+                                      <Text style={styles.badegText}>PDF</Text>
+                                    </View>
+                                  ) : (
+                                    <Text style={styles.descriptionText}>
+                                      Image
+                                    </Text>
+                                  )}
                                 </View>
                               </TouchableOpacity>
                               <Image source={MoreIcon} />
@@ -305,10 +315,10 @@ export default function FolderScreen(props: any) {
                       <View style={styles.fileContent} key={index}>
                         {generateItemShowAs(value, value.src)}
                         <TouchableOpacity
-                          onPress={() =>
+                          onPress={() => {
                             value?.type !== 'folder' &&
-                            navigation.navigate('ViewPdf')
-                          }>
+                              navigation.navigate('ViewPdf');
+                          }}>
                           <Text style={styles.textCenter}>{value?.title}</Text>
                           <Text>
                             {value?.description
@@ -320,19 +330,39 @@ export default function FolderScreen(props: any) {
                     </TouchableOpacity>
                   );
                 })}
+              </View>
             </View>
-          </View>
-        </ScrollView>
-        {generateBottomSheet()}
-      </View>
+          </ScrollView>
+          {generateBottomSheet()}
+        </View>
+      </BottomSheetWrap>
     </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
+  badeg: {
+    width: 32,
+    height: 16,
+    backgroundColor: '#EB5757',
+    borderRadius: 4,
+    justifyContent: 'center',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  badegText: {
+    fontSize: 9,
+    color: '#ffffff',
+  },
+  descriptionText: {
+    color: '#000000',
+    fontFamily: 'SF-Pro-Display-Light',
+  },
+  starStyle: {
+    marginLeft: 16,
+  },
   scrollView: {
-    width: '90%',
-    marginLeft: '5%',
+    width: '95%',
     height: '100%',
   },
   marginBottom100: {
@@ -363,13 +393,10 @@ const styles = StyleSheet.create({
     },
   },
   button: {
-    width: '90%',
     marginLeft: '5%',
-    marginTop: 20,
     backgroundColor: '#33A9FF',
     borderRadius: 10,
     display: 'flex',
-    justifyContent: 'center',
     flexDirection: 'row',
     columnGap: 10,
     alignItems: 'center',
@@ -389,12 +416,18 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     display: 'flex',
     alignItems: 'center',
+    width: '100%',
+    paddingLeft: 20,
   },
   fileDetail: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     columnGap: 10,
+    width: '100%',
+  },
+  fileSmallStyle: {
+    width: 50,
   },
   listFolders: {
     marginTop: 20,
@@ -409,20 +442,22 @@ const styles = StyleSheet.create({
     flexBasis: '33.3%',
   },
   headerTitle: {
-    fontWeight: 'bold',
     fontSize: 30,
     marginLeft: '5%',
-    marginTop: 20,
+    fontFamily: 'SF-Pro-Display-Semibold',
+    color: '#000000',
   },
   row: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
-    width: 150,
+    flex: 1,
   },
   rightAction: {
     display: 'flex',
@@ -440,7 +475,7 @@ const styles = StyleSheet.create({
   },
   swipeoutStyle: {
     backgroundColor: 'transparent',
-    width: '90%',
+    width: '100%',
   },
   centerIcon: {
     display: 'flex',
@@ -450,5 +485,10 @@ const styles = StyleSheet.create({
   },
   textColorWhite: {
     color: '#ffffff',
+  },
+  titleText: {
+    fontSize: 15,
+    color: '#000000',
+    fontFamily: 'SF-Pro-Display-Light',
   },
 });

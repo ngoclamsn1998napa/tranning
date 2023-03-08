@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import fileLock from '../assets/fileLock.png';
 import pdfFile from '../assets/pdfFile.png';
+import BottomSheetWrap from '../components/BottomSheetWrap';
 
 const files = [
   {
@@ -64,20 +65,22 @@ const files = [
 
 export default function DetailsScreen() {
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.listFolders}>
-        {files.map((value, index) => (
-          <TouchableOpacity style={styles.item} key={index}>
-            <View style={styles.fileContent} key={index}>
-              <Image source={value.src} />
-              <Text>
-                {value?.description ? value?.description : value?.createdAt}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </ScrollView>
+    <BottomSheetWrap>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.listFolders}>
+          {files.map((value, index) => (
+            <TouchableOpacity style={styles.item} key={index}>
+              <View style={styles.fileContent} key={index}>
+                <Image source={value.src} />
+                <Text>
+                  {value?.description ? value?.description : value?.createdAt}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </BottomSheetWrap>
   );
 }
 

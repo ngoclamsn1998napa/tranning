@@ -1,3 +1,8 @@
 import {Text} from 'react-native';
-const ScanScreen = () => <Text>ScanScreen</Text>;
+import BottomSheetWrap from '../components/BottomSheetWrap';
+const ScanScreen = () => (
+  <BottomSheetWrap>
+    <Text>ScanScreen</Text>
+  </BottomSheetWrap>
+);
 export default ScanScreen;

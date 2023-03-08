@@ -1,3 +1,8 @@
 import {Text} from 'react-native';
-const ToolScreen = () => <Text>ToolScreen</Text>;
+import BottomSheetWrap from '../components/BottomSheetWrap';
+const ToolScreen = () => (
+  <BottomSheetWrap>
+    <Text>ToolScreen</Text>
+  </BottomSheetWrap>
+);
 export default ToolScreen;

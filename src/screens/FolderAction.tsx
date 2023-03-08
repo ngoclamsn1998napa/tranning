@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {ThemeContext} from '../../App';
 import FolderIcon from '../../assets/folder.png';
 import CreateFolder from '../../assets/pana.png';
 import ReNameFolder from '../../assets/Rename.png';
@@ -40,13 +41,8 @@ const formatDate = () => {
   return dformat;
 };
 
-const FolderAction = ({
-  setActiveTab,
-  navigation,
-  setFileUpload,
-  actionFolder,
-  reNameObj,
-}: any) => {
+const FolderAction = ({navigation, actionFolder, reNameObj}: any) => {
+  const {setFileUpload, setActiveTab} = React.useContext(ThemeContext);
   const [inputNameValue, setInputValue] = useState('');
 
   const reNameItem = (data: any) => {
@@ -54,6 +50,7 @@ const FolderAction = ({
       if (value.id === reNameObj.id) {
         return {
           ...value,
+          updatedAt: formatDate(),
           title: inputNameValue,
         };
       }
@@ -73,14 +70,15 @@ const FolderAction = ({
         src: FolderIcon,
         description: '',
         createdAt: formatDate(),
+        updatedAt: formatDate(),
         type: 'folder',
       };
       setFileUpload((prevState: any) => [...prevState, createFolder]);
-      navigation.navigate('FolderScreen');
+      navigation.goBack();
       return;
     }
     setFileUpload((prevState: any) => reNameItem(prevState));
-    navigation.navigate('FolderScreen');
+    navigation.goBack();
     return;
   };
 
@@ -100,11 +98,11 @@ const FolderAction = ({
   return (
     <View style={styles.body}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('FolderScreen')}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.textColor}>Cancel</Text>
         </TouchableOpacity>
         <Text style={styles.textTitle}>
-          {actionFolder === 'create' ? 'Create Folder' : 'ReName'}
+          {actionFolder === 'create' ? 'Create Folder' : 'Rename'}
         </Text>
         <TouchableOpacity onPress={() => actionFolderClick()}>
           <Text style={styles.textColor}>Done</Text>
@@ -150,7 +148,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '500',
   },
-  textColor: {color: '#3377FF'},
   content: {
     display: 'flex',
     margin: 16,
@@ -167,12 +164,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     borderRadius: 10,
-    paddingLeft: 50,
     width: '100%',
     backgroundColor: '#ffffff',
+    textAlign: 'center',
+    fontFamily: 'SF-Pro-Display-Light',
+    fontSize: 17,
   },
   colorError: {
     color: 'red',
+  },
+  textColor: {
+    color: '#3377FF',
+    fontFamily: 'SF-Pro-Display-Bold',
+    fontSize: 17,
   },
 });
 

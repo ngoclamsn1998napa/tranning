@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ThemeContext} from '../../../App';
 import DoneIcon from '../../../assets/done.png';
 import FolderPlus from '../../assets/folderPlus.png';
 import IcMenu from '../../assets/icMenu.png';
@@ -15,7 +16,8 @@ export default function FolderTab(props: any) {
   const [toggleCheckBox, setToggleCheckBox] = React.useState([]);
   const selectedFile = props?.route?.params?.selectedFile;
   const ids = props?.fileUpload?.map((value: any) => value?.id);
-  const {setSelectedFileState} = props;
+  const {setSelectedFileState, setIsOpenBottomSheet, setHiddenBottomTab} =
+    React.useContext(ThemeContext);
 
   const HeaderLeft = React.useCallback(() => {
     if (selectedFile) {
@@ -31,7 +33,7 @@ export default function FolderTab(props: any) {
           }}>
           <View style={styles.selectedAll}>
             <Image source={DoneIcon} />
-            <Text style={styles.selectedText}>Selected all</Text>
+            <Text style={styles.selectedText}>Select all</Text>
           </View>
         </TouchableOpacity>
       );
@@ -44,10 +46,11 @@ export default function FolderTab(props: any) {
       return (
         <TouchableOpacity
           onPress={() => {
+            setHiddenBottomTab(false);
             props.navigation.navigate('Folder', {selectedFile: false});
           }}>
           <View>
-            <Text style={styles.selectedText}>Done</Text>
+            <Text style={styles.doneText}>Done</Text>
           </View>
         </TouchableOpacity>
       );
@@ -61,10 +64,12 @@ export default function FolderTab(props: any) {
           }>
           <Image source={FolderPlus} />
         </TouchableOpacity>
-        <Image source={IcMenu} />
+        <TouchableOpacity onPress={() => setIsOpenBottomSheet(true)}>
+          <Image source={IcMenu} />
+        </TouchableOpacity>
       </View>
     );
-  }, [props.navigation, selectedFile]);
+  }, [props.navigation, selectedFile, setIsOpenBottomSheet]);
 
   return (
     <SettingStack.Navigator
@@ -138,5 +143,12 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     color: '#3377FF',
+    fontFamily: 'SF-Pro-Display-Light',
+    fontSize: 17,
+  },
+  doneText: {
+    color: '#3377FF',
+    fontFamily: 'SF-Pro-Display-Bold',
+    fontSize: 17,
   },
 });

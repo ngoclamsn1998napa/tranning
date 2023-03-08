@@ -1,26 +1,31 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ThemeContext} from '../../../App';
 import IcMenu from '../../assets/icMenu.png';
 import Setting from '../../assets/settings.png';
+import FolderAction from '../FolderAction';
 
 import MyScanScreen from '../MyScanScreen';
 const SettingStack = createNativeStackNavigator();
 
-const HeaderRight = () => (
+const HeaderRight = (setIsOpenBottomSheet: any) => (
   <View style={styles.headerRight}>
-    <Image source={IcMenu} />
+    <TouchableOpacity onPress={() => setIsOpenBottomSheet(true)}>
+      <Image source={IcMenu} />
+    </TouchableOpacity>
   </View>
 );
 
 const HeaderLeft = () => <Image source={Setting} />;
 
 export default function ScanTab(props: any) {
+  const {setIsOpenBottomSheet} = React.useContext(ThemeContext);
   return (
     <SettingStack.Navigator
       screenOptions={{
         headerBackTitle: '',
-        headerRight: HeaderRight,
+        headerRight: () => HeaderRight(setIsOpenBottomSheet),
       }}>
       <SettingStack.Screen
         name="MyScan"
@@ -31,6 +36,25 @@ export default function ScanTab(props: any) {
         children={propsChildren => (
           <MyScanScreen {...propsChildren} {...props} />
         )}
+      />
+      <SettingStack.Screen
+        name="ActionFolder"
+        options={{
+          title: '',
+          header: () => null,
+          presentation: 'modal',
+          headerShown: true,
+        }}
+        children={propChildren => {
+          return (
+            <FolderAction
+              {...propChildren}
+              {...props}
+              actionFolder={propChildren?.route?.params?.actionFolder}
+              reNameObj={propChildren?.route?.params?.reNameObj}
+            />
+          );
+        }}
       />
     </SettingStack.Navigator>
   );

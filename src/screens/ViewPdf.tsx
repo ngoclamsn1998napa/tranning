@@ -1,16 +1,15 @@
 import React, {useEffect} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Pdf from 'react-native-pdf';
+import {ThemeContext} from '../../App';
 
 const ViewPdf = (props: any) => {
-  const setActiveTab = props?.setActiveTab;
+  const {setIsOpenBottomSheet} = React.useContext(ThemeContext);
 
   useEffect(() => {
-    if (setActiveTab) {
-      setActiveTab('view-pdf');
-    }
-    return () => setActiveTab('FolderScreen');
-  }, [setActiveTab]);
+    setIsOpenBottomSheet(true);
+    return () => setIsOpenBottomSheet(false);
+  }, [setIsOpenBottomSheet]);
   return (
     <View style={styles.container}>
       <Pdf
