@@ -42,7 +42,8 @@ const formatDate = () => {
 };
 
 const FolderAction = ({navigation, actionFolder, reNameObj}: any) => {
-  const {setFileUpload, setActiveTab} = React.useContext(ThemeContext);
+  const {setFileUpload, setActiveTab, setHiddenBottomTab} =
+    React.useContext(ThemeContext);
   const [inputNameValue, setInputValue] = useState('');
 
   const reNameItem = (data: any) => {
@@ -81,6 +82,11 @@ const FolderAction = ({navigation, actionFolder, reNameObj}: any) => {
     navigation.goBack();
     return;
   };
+
+  React.useEffect(() => {
+    setHiddenBottomTab(true);
+    return () => setHiddenBottomTab(false);
+  }, [setHiddenBottomTab]);
 
   React.useEffect(() => {
     if (setActiveTab) {
