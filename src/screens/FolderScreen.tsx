@@ -90,6 +90,7 @@ export default function FolderScreen(props: any) {
         navigation.navigate('ActionFolder', {
           actionFolder: 'reName',
           reNameObj: user,
+          from: 'folderScreen',
         });
       },
     },

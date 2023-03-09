@@ -61,6 +61,7 @@ const MyScanScreen = () => {
         navigation.navigate('ActionFolder', {
           actionFolder: 'reName',
           reNameObj: user,
+          from: 'myScan',
         });
       },
     },

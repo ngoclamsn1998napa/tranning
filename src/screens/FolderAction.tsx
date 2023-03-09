@@ -41,7 +41,7 @@ const formatDate = () => {
   return dformat;
 };
 
-const FolderAction = ({navigation, actionFolder, reNameObj}: any) => {
+const FolderAction = ({navigation, actionFolder, reNameObj, from}: any) => {
   const {setFileUpload, setActiveTab, setHiddenBottomTab} =
     React.useContext(ThemeContext);
   const [inputNameValue, setInputValue] = useState('');
@@ -75,11 +75,15 @@ const FolderAction = ({navigation, actionFolder, reNameObj}: any) => {
         type: 'folder',
       };
       setFileUpload((prevState: any) => [...prevState, createFolder]);
-      navigation.goBack();
+      navigation.navigate('FolderScreen');
       return;
     }
     setFileUpload((prevState: any) => reNameItem(prevState));
-    navigation.goBack();
+    if (from === 'myScan') {
+      navigation.navigate('FolderScreen');
+    } else {
+      navigation.goBack();
+    }
     return;
   };
 

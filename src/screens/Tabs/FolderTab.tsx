@@ -125,6 +125,7 @@ export default function FolderTab(props: any) {
               {...props}
               actionFolder={propChildren?.route?.params?.actionFolder}
               reNameObj={propChildren?.route?.params?.reNameObj}
+              from={propChildren?.route?.params?.from}
             />
           );
         }}
