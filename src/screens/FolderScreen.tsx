@@ -1,4 +1,3 @@
-import CheckBox from '@react-native-community/checkbox';
 import * as React from 'react';
 import {
   Image,
@@ -8,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import CheckBox from 'react-native-check-box';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Swipeout from 'react-native-swipeout';
 import {ThemeContext} from '../../App';
@@ -16,12 +16,13 @@ import DeleteIcon from '../../assets/delete.png';
 import MoreIconWhite from '../../assets/more.png';
 import ShareIcon from '../../assets/share.png';
 import DeleteBlackIcon from '../../assets/trashBlack.png';
+import UnCheckBox from '../assets/Checkbox.png';
+import CheckedIcon from '../assets/Checked.png';
 import fileSmall from '../assets/fileSmall.png';
 import folderIcon from '../assets/folder.png';
 import MoreIcon from '../assets/icMenu.png';
 import Star from '../assets/star.png';
 import BottomSheetWrap from '../components/BottomSheetWrap';
-
 const generateUUID = () => {
   var d = new Date().getTime(); //Timestamp
   var d2 =
@@ -124,19 +125,22 @@ export default function FolderScreen(props: any) {
   const generateCheckBox = value => {
     if (selectedFile) {
       return (
-        <CheckBox
-          disabled={false}
-          value={toggleCheckBox.includes(value?.id)}
-          onValueChange={() => {
-            if (!toggleCheckBox.includes(value?.id)) {
-              setToggleCheckBox(prevState => [...prevState, value.id]);
-            } else {
-              setToggleCheckBox(
-                toggleCheckBox.filter(item => item !== value.id),
-              );
-            }
-          }}
-        />
+        <View style={{width: 24}}>
+          <CheckBox
+            isChecked={toggleCheckBox.includes(value?.id)}
+            onClick={() => {
+              if (!toggleCheckBox.includes(value?.id)) {
+                setToggleCheckBox(prevState => [...prevState, value.id]);
+              } else {
+                setToggleCheckBox(
+                  toggleCheckBox.filter(item => item !== value.id),
+                );
+              }
+            }}
+            checkedImage={<Image source={CheckedIcon} />}
+            unCheckedImage={<Image source={UnCheckBox} />}
+          />
+        </View>
       );
     }
     return null;
@@ -169,19 +173,11 @@ export default function FolderScreen(props: any) {
       return <Image source={imageSrc} />;
     }
     return (
-      <View style={{position: 'relative'}}>
-        <View
-          style={{
-            position: 'absolute',
-            zIndex: 1111,
-            left: '50%',
-            top: '40%',
-            transform: [{translateX: -30}],
-          }}>
+      <View style={styles.relative}>
+        <View style={styles.checkStyle}>
           <CheckBox
-            disabled={false}
-            value={toggleCheckBox.includes(value?.id)}
-            onValueChange={() => {
+            isChecked={toggleCheckBox.includes(value?.id)}
+            onClick={() => {
               if (!toggleCheckBox.includes(value?.id)) {
                 setToggleCheckBox(prevState => [...prevState, value.id]);
               } else {
@@ -190,6 +186,8 @@ export default function FolderScreen(props: any) {
                 );
               }
             }}
+            checkedImage={<Image source={CheckedIcon} />}
+            unCheckedImage={<Image source={UnCheckBox} />}
           />
         </View>
         <Image source={imageSrc} />
@@ -341,6 +339,19 @@ export default function FolderScreen(props: any) {
 }
 
 const styles = StyleSheet.create({
+  checkStyle: {
+    position: 'absolute',
+    zIndex: 1111,
+    left: '50%',
+    top: '40%',
+    transform: [{translateX: -30}],
+  },
+  relative: {
+    position: 'relative',
+  },
+  checkbox: {
+    borderRadius: 500,
+  },
   badeg: {
     width: 32,
     height: 16,

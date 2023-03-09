@@ -114,7 +114,6 @@ export default function BottomSheetWrap({children}: any) {
         ]}
         onPress={() => {
           setSortBy(value.key);
-          setIsOpenBottomSheet(false);
         }}
         key={i}>
         <Text>{value.title}</Text>
@@ -131,7 +130,6 @@ export default function BottomSheetWrap({children}: any) {
         ]}
         onPress={() => {
           setShowAs(value.key);
-          setIsOpenBottomSheet(false);
         }}
         key={i}>
         <Image source={value.src} />

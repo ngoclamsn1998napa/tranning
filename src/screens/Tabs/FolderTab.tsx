@@ -15,9 +15,13 @@ const SettingStack = createNativeStackNavigator();
 export default function FolderTab(props: any) {
   const [toggleCheckBox, setToggleCheckBox] = React.useState([]);
   const selectedFile = props?.route?.params?.selectedFile;
-  const ids = props?.fileUpload?.map((value: any) => value?.id);
-  const {setSelectedFileState, setIsOpenBottomSheet, setHiddenBottomTab} =
-    React.useContext(ThemeContext);
+  const {
+    setSelectedFileState,
+    setIsOpenBottomSheet,
+    setHiddenBottomTab,
+    fileUpload,
+  } = React.useContext(ThemeContext);
+  const ids = fileUpload?.map((value: any) => value?.id);
 
   const HeaderLeft = React.useCallback(() => {
     if (selectedFile) {

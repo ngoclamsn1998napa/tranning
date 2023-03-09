@@ -3,13 +3,13 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import Pdf from 'react-native-pdf';
 import {ThemeContext} from '../../App';
 
-const ViewPdf = (props: any) => {
-  const {setIsOpenBottomSheet} = React.useContext(ThemeContext);
+const ViewPdf = () => {
+  const {setHiddenBottomTab} = React.useContext(ThemeContext);
 
   useEffect(() => {
-    setIsOpenBottomSheet(true);
-    return () => setIsOpenBottomSheet(false);
-  }, [setIsOpenBottomSheet]);
+    setHiddenBottomTab(true);
+    return () => setHiddenBottomTab(false);
+  }, [setHiddenBottomTab]);
   return (
     <View style={styles.container}>
       <Pdf
