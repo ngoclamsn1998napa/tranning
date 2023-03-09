@@ -249,13 +249,20 @@ export default function FolderScreen(props: any) {
                         <View style={styles.fileContentRow} key={index}>
                           <View style={styles.fileDetail}>
                             {generateCheckBox(value)}
-                            <Image
-                              source={
-                                value.type === 'folder' ? folderIcon : fileSmall
-                              }
-                              style={styles.fileSmallStyle}
-                            />
-                            <View style={styles.row}>
+                            <View>
+                              <Image
+                                source={
+                                  value.type === 'folder'
+                                    ? folderIcon
+                                    : fileSmall
+                                }
+                                style={[
+                                  styles.fileSmallStyle,
+                                  styles.paddingBottom15,
+                                ]}
+                              />
+                            </View>
+                            <View style={[styles.row, styles.paddingBottom15]}>
                               <TouchableOpacity
                                 onPress={() => {
                                   if (value.type === 'folder') {
@@ -459,12 +466,17 @@ const styles = StyleSheet.create({
     fontFamily: 'SF-Pro-Display-Semibold',
     color: '#000000',
   },
+  paddingBottom15: {
+    paddingBottom: 15,
+  },
   row: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#292D36',
   },
   column: {
     display: 'flex',

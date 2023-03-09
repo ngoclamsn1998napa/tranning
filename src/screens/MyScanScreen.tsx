@@ -91,42 +91,46 @@ const MyScanScreen = () => {
                     style={styles.swipeoutStyle}>
                     <View style={styles.fileContentRow} key={index}>
                       <View style={styles.fileDetail}>
-                        <Image
-                          source={fileSmall}
-                          style={styles.fileSmallStyle}
-                        />
-                        <View style={styles.row}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              // if (value.type === 'folder') {
-                              //   return navigation.navigate('Details');
-                              // }
-                              // navigation.navigate('ViewPdf');
-                            }}>
-                            <View style={styles.column}>
-                              <Text style={styles.titleText}>
-                                {value?.description
-                                  ? value?.description
-                                  : value?.title}
-                              </Text>
-                              <Text style={styles.descriptionText}>
-                                {value?.createdAt}
-                              </Text>
-                              {value.format === 'pdf' ? (
-                                <View style={styles.badeg}>
-                                  <Text style={styles.badegText}>PDF</Text>
-                                </View>
-                              ) : (
-                                <Text style={styles.descriptionText}>
-                                  Image
-                                </Text>
-                              )}
-                            </View>
-                          </TouchableOpacity>
+                        <View style={styles.paddingBottom15}>
                           <Image
-                            source={MoreIcon}
-                            style={styles.moreIconStyle}
+                            source={fileSmall}
+                            style={styles.fileSmallStyle}
                           />
+                        </View>
+                        <View style={[styles.column]}>
+                          <View style={[styles.row, styles.paddingBottom15]}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                // if (value.type === 'folder') {
+                                //   return navigation.navigate('Details');
+                                // }
+                                // navigation.navigate('ViewPdf');
+                              }}>
+                              <View style={styles.column}>
+                                <Text style={styles.titleText}>
+                                  {value?.description
+                                    ? value?.description
+                                    : value?.title}
+                                </Text>
+                                <Text style={styles.descriptionText}>
+                                  {value?.createdAt}
+                                </Text>
+                                {value.format === 'pdf' ? (
+                                  <View style={styles.badeg}>
+                                    <Text style={styles.badegText}>PDF</Text>
+                                  </View>
+                                ) : (
+                                  <Text style={styles.descriptionText}>
+                                    Image
+                                  </Text>
+                                )}
+                              </View>
+                            </TouchableOpacity>
+                            <Image
+                              source={MoreIcon}
+                              style={styles.moreIconStyle}
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>
@@ -179,6 +183,9 @@ const styles = StyleSheet.create({
   },
   fileSmallStyle: {
     width: 50,
+  },
+  paddingBottom15: {
+    paddingBottom: 15,
   },
   descriptionText: {
     color: '#000000',
@@ -329,6 +336,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#292D36',
   },
   column: {
     display: 'flex',
