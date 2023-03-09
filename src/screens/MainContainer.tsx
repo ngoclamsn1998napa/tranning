@@ -11,6 +11,7 @@ const Tab = createBottomTabNavigator();
 
 import {ThemeContext} from '../../App';
 import TabBarIcon from '../components/TabBarIcon';
+import TabBarLabel from '../components/TabBarLabel';
 import TabBarScanQrIcon from '../components/TabBarScanQrIcon';
 import ScanScreen from './ScanScreen';
 import SearchScreen from './SearchScreen';
@@ -33,7 +34,6 @@ function MainContainer() {
     };
 
     return {
-      tabBarShowLabel: false,
       unmountOnBlur: true,
       tabBarStyle: newStyles,
       header: () => null,
@@ -60,6 +60,7 @@ function MainContainer() {
         name="Home"
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, Files),
+          tabBarLabel: ({focused}) => TabBarLabel(focused, 'My Scans'),
         }}
         children={() => <ScanTab />}
       />
@@ -67,6 +68,7 @@ function MainContainer() {
         name="Folder"
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, FolderIcon),
+          tabBarLabel: ({focused}) => TabBarLabel(focused, 'Library'),
         }}
         children={propsChildren => {
           const selectedFileParams =
@@ -86,6 +88,7 @@ function MainContainer() {
         name="Search"
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, Search),
+          tabBarLabel: ({focused}) => TabBarLabel(focused, 'Search'),
         }}
         component={SearchScreen}
       />
@@ -93,6 +96,7 @@ function MainContainer() {
         name="Tool"
         options={{
           tabBarIcon: ({focused}) => TabBarIcon(focused, Pen),
+          tabBarLabel: ({focused}) => TabBarLabel(focused, 'Tools'),
         }}
         component={ToolScreen}
       />
