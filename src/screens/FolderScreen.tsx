@@ -309,11 +309,13 @@ export default function FolderScreen(props: any) {
                               navigation.navigate('ViewPdf');
                           }}>
                           <Text style={styles.textCenter}>{value?.title}</Text>
-                          <Text>
-                            {value?.description
-                              ? value?.description
-                              : value?.createdAt}
-                          </Text>
+                          {value?.type !== 'folder' ? (
+                            <Text style={styles.titleCenter}>
+                              {value?.createdAt}
+                            </Text>
+                          ) : (
+                            <Text style={styles.title}>3 items</Text>
+                          )}
                         </TouchableOpacity>
                       </View>
                     </TouchableOpacity>
@@ -330,6 +332,13 @@ export default function FolderScreen(props: any) {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontFamily: 'SF-Pro-Display-Light',
+    fontSize: 12,
+  },
+  titleCenter: {
+    textAlign: 'center',
+  },
   checkStyle: {
     position: 'absolute',
     zIndex: 1111,
