@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {v4 as generateUUID} from 'uuid';
 import {ThemeContext} from '../../App';
 import FilePlusIcon from '../assets/file-plus.png';
 import GridShowAs from '../assets/grid.png';
@@ -17,7 +18,6 @@ import ImageIcon from '../assets/image.png';
 import ListShowAs from '../assets/list.png';
 import pdfFile from '../assets/pdfFile.png';
 import SelectedFileIcon from '../assets/Selected.png';
-
 const sortByList = [
   {title: 'Name', key: 'name'},
   {title: 'Updated', key: 'updated'},
@@ -34,22 +34,6 @@ const fileAction = [
   {title: 'Import Photos', key: 'import_photo', src: ImageIcon},
   {title: 'Import Files', key: 'import_file', src: FilePlusIcon},
 ];
-
-const generateUUID = () => {
-  let d = new Date().getTime(); //Timestamp
-  let d2 = 0;
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    let r = Math.random() * 16;
-    if (d > 0) {
-      r = (d + r) % 16 | 0;
-      d = Math.floor(d / 16);
-    } else {
-      r = (d2 + r) % 16 | 0;
-      d2 = Math.floor(d2 / 16);
-    }
-    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
-};
 
 export default function BottomSheetWrap({children}: any) {
   const {
