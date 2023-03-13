@@ -85,6 +85,10 @@ export default function FolderTab(props: any) {
       screenOptions={{
         headerBackTitle: '',
         headerRight: HeaderRight,
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: '#ffffff',
+        },
       }}>
       <SettingStack.Screen
         name="FolderScreen"

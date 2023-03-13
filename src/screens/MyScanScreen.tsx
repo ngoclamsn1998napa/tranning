@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
   },
   scanStyle: {
     height: '100%',
+    backgroundColor: '#ffffff',
   },
   scanBackGround: {
     display: 'flex',

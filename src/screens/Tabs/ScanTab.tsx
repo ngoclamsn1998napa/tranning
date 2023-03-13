@@ -26,6 +26,10 @@ export default function ScanTab(props: any) {
       screenOptions={{
         headerBackTitle: '',
         headerRight: () => HeaderRight(setIsOpenBottomSheet),
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: '#ffffff',
+        },
       }}>
       <SettingStack.Screen
         name="MyScan"

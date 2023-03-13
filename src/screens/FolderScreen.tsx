@@ -384,6 +384,7 @@ const styles = StyleSheet.create({
   },
   height100: {
     height: '100%',
+    backgroundColor: '#ffffff',
   },
   textCenter: {
     textAlign: 'center',

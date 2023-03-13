@@ -64,25 +64,32 @@ const files = [
 
 export default function DetailsScreen() {
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.listFolders}>
-        {files.map((value, index) => (
-          <TouchableOpacity style={styles.item} key={index}>
-            <View style={styles.fileContent} key={index}>
-              <Image source={value.src} />
-              <View style={styles.description}>
-                <Text style={styles.title}>{value?.description}</Text>
-                <Text style={styles.createdAt}>{value?.createdAt}</Text>
+    <View style={styles.fullScreen}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.listFolders}>
+          {files.map((value, index) => (
+            <TouchableOpacity style={styles.item} key={index}>
+              <View style={styles.fileContent} key={index}>
+                <Image source={value.src} />
+                <View style={styles.description}>
+                  <Text style={styles.title}>{value?.description}</Text>
+                  <Text style={styles.createdAt}>{value?.createdAt}</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </ScrollView>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  fullScreen: {
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: '100%',
+  },
   createdAt: {
     fontSize: 12,
     color: '#5C6068',

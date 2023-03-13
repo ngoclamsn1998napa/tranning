@@ -37,6 +37,10 @@ function MainContainer() {
       unmountOnBlur: true,
       tabBarStyle: newStyles,
       header: () => null,
+      headerShadowVisible: false,
+      headerStyle: {
+        backgroundColor: '#ffffff',
+      },
       title: '',
     };
   }, [hiddenBottomTab]);
