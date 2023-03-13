@@ -62,10 +62,9 @@ const FolderAction = ({navigation, actionFolder, reNameObj, from}: any) => {
     setFileUpload((prevState: any) => reNameItem(prevState));
     if (from === 'myScan') {
       navigation.navigate('FolderScreen');
-    } else {
-      navigation.goBack();
+      return;
     }
-    return;
+    navigation.goBack();
   };
 
   React.useEffect(() => {

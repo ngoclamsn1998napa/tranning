@@ -8,7 +8,6 @@ const TabBarLabel = (focused: any, text: any) => (
 
 const styles = StyleSheet.create({
   textColor: (focused: boolean): any => ({
-    tintColor: focused ? '#33A9FF' : '#748c94',
     color: focused ? '#33A9FF' : '#748c94',
     fontSize: 10,
   }),
