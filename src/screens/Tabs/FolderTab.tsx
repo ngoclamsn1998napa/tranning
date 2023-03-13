@@ -73,7 +73,12 @@ export default function FolderTab(props: any) {
         </TouchableOpacity>
       </View>
     );
-  }, [props.navigation, selectedFile, setIsOpenBottomSheet]);
+  }, [
+    props.navigation,
+    selectedFile,
+    setHiddenBottomTab,
+    setIsOpenBottomSheet,
+  ]);
 
   return (
     <SettingStack.Navigator
@@ -119,13 +124,18 @@ export default function FolderTab(props: any) {
           headerShown: true,
         }}
         children={propChildren => {
+          const {
+            actionFolder = '',
+            reNameObj = '',
+            from = '',
+          } = (propChildren?.route?.params || {}) as any;
           return (
             <FolderAction
               {...propChildren}
               {...props}
-              actionFolder={propChildren?.route?.params?.actionFolder}
-              reNameObj={propChildren?.route?.params?.reNameObj}
-              from={propChildren?.route?.params?.from}
+              actionFolder={actionFolder}
+              reNameObj={reNameObj}
+              from={from}
             />
           );
         }}

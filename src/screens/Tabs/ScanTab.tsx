@@ -46,12 +46,14 @@ export default function ScanTab(props: any) {
           headerShown: true,
         }}
         children={propChildren => {
+          const {actionFolder = '', reNameObj = ''} = (propChildren?.route
+            ?.params || {}) as any;
           return (
             <FolderAction
               {...propChildren}
               {...props}
-              actionFolder={propChildren?.route?.params?.actionFolder}
-              reNameObj={propChildren?.route?.params?.reNameObj}
+              actionFolder={actionFolder}
+              reNameObj={reNameObj}
             />
           );
         }}
