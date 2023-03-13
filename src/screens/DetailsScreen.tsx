@@ -14,49 +14,49 @@ const files = [
   {
     title: 'Scan 2021-06-01 10:43:50',
     src: pdfFile,
-    description: '',
+    description: 'Scan 2021-06-01 10:43:50',
     createdAt: '10:43',
     type: 'file',
   },
   {
     title: 'Scan 2021-06-01 10:43:50',
     src: fileLock,
-    description: '',
+    description: 'Scan 2021-06-01 10:43:50',
     createdAt: '01/06/2021',
     type: 'file',
   },
   {
     title: 'Scan 2021-06-01 10:43:50',
     src: fileLock,
-    description: '',
+    description: 'Scan 2021-06-01 10:43:50',
     createdAt: '01/06/2021',
     type: 'file',
   },
   {
     title: 'Scan 2021-06-01 10:43:50',
     src: fileLock,
-    description: '',
+    description: 'Scan 2021-06-01 10:43:50',
     createdAt: '01/06/2021',
     type: 'file',
   },
   {
     title: 'Scan 2021-06-01 10:43:50',
     src: fileLock,
-    description: '',
+    description: 'Scan 2021-06-01 10:43:50',
     createdAt: '01/06/2021',
     type: 'file',
   },
   {
     title: 'Scan 2021-06-01 10:43:50',
     src: pdfFile,
-    description: '',
+    description: 'Scan 2021-06-01 10:43:50',
     createdAt: '01/06/2021',
     type: 'file',
   },
   {
     title: 'Scan 2021-06-01 10:43:50',
     src: pdfFile,
-    description: '',
+    description: 'Scan 2021-06-01 10:43:50',
     createdAt: '01/06/2021',
     type: 'file',
   },
@@ -70,9 +70,10 @@ export default function DetailsScreen() {
           <TouchableOpacity style={styles.item} key={index}>
             <View style={styles.fileContent} key={index}>
               <Image source={value.src} />
-              <Text>
-                {value?.description ? value?.description : value?.createdAt}
-              </Text>
+              <View style={styles.description}>
+                <Text style={styles.title}>{value?.description}</Text>
+                <Text style={styles.createdAt}>{value?.createdAt}</Text>
+              </View>
             </View>
           </TouchableOpacity>
         ))}
@@ -82,7 +83,23 @@ export default function DetailsScreen() {
 }
 
 const styles = StyleSheet.create({
+  createdAt: {
+    fontSize: 12,
+    color: '#5C6068',
+    textAlign: 'center',
+    fontFamily: 'SF-Pro-Display-Light',
+  },
+  title: {
+    fontSize: 12,
+    color: '#000000',
+    textAlign: 'center',
+    fontFamily: 'SF-Pro-Display-Bold',
+  },
   scrollView: {width: '90%', marginLeft: '5%'},
+  description: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   button: {
     width: '90%',
     marginLeft: '5%',

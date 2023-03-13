@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import DocumentPicker, {types} from 'react-native-document-picker';
+import 'react-native-get-random-values';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {v4 as generateUUID} from 'uuid';
 import {ThemeContext} from '../../App';

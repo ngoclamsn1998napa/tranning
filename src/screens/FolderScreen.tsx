@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import 'react-native-get-random-values';
 import Swipeout from 'react-native-swipeout';
 import {v4 as generateUUID} from 'uuid';
 import {ThemeContext} from '../../App';
@@ -375,7 +376,12 @@ const styles = StyleSheet.create({
   height100: {
     height: '100%',
   },
-  textCenter: {textAlign: 'center'},
+  textCenter: {
+    textAlign: 'center',
+    color: '#000000',
+    fontFamily: 'SF-Pro-Display-Bold',
+    fontSize: 12,
+  },
   bottomSheet: {
     position: 'absolute',
     bottom: 0,

@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import 'react-native-get-random-values';
 import {v4 as generateUUID} from 'uuid';
 import {ThemeContext} from '../../App';
 import FolderIcon from '../../assets/folder.png';
 import CreateFolder from '../../assets/pana.png';
 import ReNameFolder from '../../assets/Rename.png';
-
 const formatDate = () => {
   var d = new Date(),
     dformat =
