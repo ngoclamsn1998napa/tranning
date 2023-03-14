@@ -184,11 +184,8 @@ export default function FolderScreen(props: any) {
       setListFileState(fileUpload);
       setActiveTab('folder');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileUpload]);
-
-  React.useEffect(() => {
-    setActiveTab('folder');
-  }, [setActiveTab]);
 
   return (
     <GestureHandlerRootView>
