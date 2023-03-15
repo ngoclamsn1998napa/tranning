@@ -7,8 +7,9 @@ import Pen from '../assets/pen.png';
 import Search from '../assets/search.png';
 import MidIcon from '../assets/tabMid.png';
 import FolderTab from './FolderStack';
-const Tab = createBottomTabNavigator();
 
+import {NavigationContainer} from '@react-navigation/native';
+import BootSplash from 'react-native-bootsplash';
 import {ThemeContext} from '../../App';
 import TabBarIcon from '../components/TabBarIcon';
 import TabBarLabel from '../components/TabBarLabel';
@@ -17,6 +18,8 @@ import ScanScreen from '../screens/ScanScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ToolScreen from '../screens/ToolScreen';
 import ScanTab from './ScanStack';
+
+const Tab = createBottomTabNavigator();
 
 function MainContainer() {
   const {
@@ -59,52 +62,58 @@ function MainContainer() {
   }, [fileUpload, sortBy]);
 
   return (
-    <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
-      <Tab.Screen
-        name="Home"
-        options={{
-          tabBarIcon: ({focused}) => TabBarIcon(focused, Files),
-          tabBarLabel: ({focused}) => TabBarLabel(focused, 'My Scans'),
-        }}
-        children={() => <ScanTab />}
-      />
-      <Tab.Screen
-        name="Folder"
-        options={{
-          tabBarIcon: ({focused}) => TabBarIcon(focused, FolderIcon),
-          tabBarLabel: ({focused}) => TabBarLabel(focused, 'Library'),
-        }}
-        children={propsChildren => {
-          const selectedFileParams =
-            propsChildren?.route?.params?.selectedFile || false;
-          setSelectedFileState(selectedFileParams);
-          return <FolderTab {...propsChildren} />;
-        }}
-      />
-      <Tab.Screen
-        name="Scan"
-        options={{
-          tabBarIcon: () => TabBarScanQrIcon(MidIcon),
-        }}
-        component={ScanScreen}
-      />
-      <Tab.Screen
-        name="Search"
-        options={{
-          tabBarIcon: ({focused}) => TabBarIcon(focused, Search),
-          tabBarLabel: ({focused}) => TabBarLabel(focused, 'Search'),
-        }}
-        component={SearchScreen}
-      />
-      <Tab.Screen
-        name="Tool"
-        options={{
-          tabBarIcon: ({focused}) => TabBarIcon(focused, Pen),
-          tabBarLabel: ({focused}) => TabBarLabel(focused, 'Tools'),
-        }}
-        component={ToolScreen}
-      />
-    </Tab.Navigator>
+    <NavigationContainer
+      theme={{colors: {secondaryContainer: 'transparent'}}}
+      onReady={async () => {
+        BootSplash.hide();
+      }}>
+      <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
+        <Tab.Screen
+          name="Home"
+          options={{
+            tabBarIcon: ({focused}) => TabBarIcon(focused, Files),
+            tabBarLabel: ({focused}) => TabBarLabel(focused, 'My Scans'),
+          }}
+          children={() => <ScanTab />}
+        />
+        <Tab.Screen
+          name="Folder"
+          options={{
+            tabBarIcon: ({focused}) => TabBarIcon(focused, FolderIcon),
+            tabBarLabel: ({focused}) => TabBarLabel(focused, 'Library'),
+          }}
+          children={propsChildren => {
+            const selectedFileParams =
+              propsChildren?.route?.params?.selectedFile || false;
+            setSelectedFileState(selectedFileParams);
+            return <FolderTab {...propsChildren} />;
+          }}
+        />
+        <Tab.Screen
+          name="Scan"
+          options={{
+            tabBarIcon: () => TabBarScanQrIcon(MidIcon),
+          }}
+          component={ScanScreen}
+        />
+        <Tab.Screen
+          name="Search"
+          options={{
+            tabBarIcon: ({focused}) => TabBarIcon(focused, Search),
+            tabBarLabel: ({focused}) => TabBarLabel(focused, 'Search'),
+          }}
+          component={SearchScreen}
+        />
+        <Tab.Screen
+          name="Tool"
+          options={{
+            tabBarIcon: ({focused}) => TabBarIcon(focused, Pen),
+            tabBarLabel: ({focused}) => TabBarLabel(focused, 'Tools'),
+          }}
+          component={ToolScreen}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 

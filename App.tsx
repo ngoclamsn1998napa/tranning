@@ -1,8 +1,6 @@
-import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {createContext, useState} from 'react';
-import BootSplash from 'react-native-bootsplash';
-import MainContainer from './src/route/Index';
+import Route from './src/route/Index';
 
 export const ThemeContext = createContext<any>({});
 
@@ -34,13 +32,7 @@ function App() {
         hiddenBottomTab,
         setHiddenBottomTab: (data: any) => setHiddenBottomTab(data),
       }}>
-      <NavigationContainer
-        theme={{colors: {secondaryContainer: 'transparent'}}}
-        onReady={async () => {
-          BootSplash.hide();
-        }}>
-        <MainContainer />
-      </NavigationContainer>
+      <Route />
     </ThemeContext.Provider>
   );
 }
