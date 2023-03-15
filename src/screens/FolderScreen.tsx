@@ -203,12 +203,9 @@ export default function FolderScreen(props: any) {
                   <View style={styles.starStyle}>
                     <Image source={Star} />
                   </View>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('MyScan')}>
-                    <Text style={styles.text}>
-                      Upgrade to get the most out of Scan Studio
-                    </Text>
-                  </TouchableOpacity>
+                  <Text style={styles.text}>
+                    Upgrade to get the most out of Scan Studio
+                  </Text>
                 </View>
               )) ||
                 null}
