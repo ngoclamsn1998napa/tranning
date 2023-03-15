@@ -1,15 +1,15 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ThemeContext} from '../../../App';
 import DoneIcon from '../../../assets/done.png';
+import {ThemeContext} from '../../App';
 import FolderPlus from '../../assets/folderPlus.png';
 import IcMenu from '../../assets/icMenu.png';
 import Setting from '../../assets/settings.png';
-import DetailsScreen from '../DetailsScreen';
-import FolderAction from '../FolderAction';
-import FolderScreen from '../FolderScreen';
-import ViewPdf from '../ViewPdf';
+import DetailsScreen from '../screens/DetailsScreen';
+import FolderAction from '../screens/FolderAction';
+import FolderScreen from '../screens/FolderScreen';
+import ViewPdf from '../screens/ViewPdf';
 const SettingStack = createNativeStackNavigator();
 
 export default function FolderTab(props: any) {

@@ -2,7 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {createContext, useState} from 'react';
 import BootSplash from 'react-native-bootsplash';
-import MainContainer from './src/screens/MainContainer';
+import MainContainer from './src/route/Index';
 
 export const ThemeContext = createContext<any>({});
 

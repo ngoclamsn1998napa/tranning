@@ -6,17 +6,17 @@ import FolderIcon from '../assets/folderIcon.png';
 import Pen from '../assets/pen.png';
 import Search from '../assets/search.png';
 import MidIcon from '../assets/tabMid.png';
-import FolderTab from './Tabs/FolderTab';
+import FolderTab from './FolderStack';
 const Tab = createBottomTabNavigator();
 
 import {ThemeContext} from '../../App';
 import TabBarIcon from '../components/TabBarIcon';
 import TabBarLabel from '../components/TabBarLabel';
 import TabBarScanQrIcon from '../components/TabBarScanQrIcon';
-import ScanScreen from './ScanScreen';
-import SearchScreen from './SearchScreen';
-import ScanTab from './Tabs/ScanTab';
-import ToolScreen from './ToolScreen';
+import ScanScreen from '../screens/ScanScreen';
+import SearchScreen from '../screens/SearchScreen';
+import ToolScreen from '../screens/ToolScreen';
+import ScanTab from './ScanStack';
 
 function MainContainer() {
   const {

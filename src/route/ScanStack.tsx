@@ -1,12 +1,12 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {ThemeContext} from '../../../App';
+import {ThemeContext} from '../../App';
 import IcMenu from '../../assets/icMenu.png';
 import Setting from '../../assets/settings.png';
-import FolderAction from '../FolderAction';
+import FolderAction from '../screens/FolderAction';
 
-import MyScanScreen from '../MyScanScreen';
+import MyScanScreen from '../screens/MyScanScreen';
 const SettingStack = createNativeStackNavigator();
 
 const HeaderRight = (setIsOpenBottomSheet: any) => (
