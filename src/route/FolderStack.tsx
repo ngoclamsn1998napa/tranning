@@ -1,8 +1,8 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import DoneIcon from '../../../assets/done.png';
 import {ThemeContext} from '../../App';
+import DoneIcon from '../../assets/done.png';
 import FolderPlus from '../../assets/folderPlus.png';
 import IcMenu from '../../assets/icMenu.png';
 import Setting from '../../assets/settings.png';
