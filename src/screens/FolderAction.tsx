@@ -8,8 +8,8 @@ import {
   View,
 } from 'react-native';
 import 'react-native-get-random-values';
+import {useDispatch, useSelector} from 'react-redux';
 import {v4 as generateUUID} from 'uuid';
-import {ThemeContext} from '../../App';
 import FolderIcon from '../../assets/folder.png';
 import CreateFolder from '../../assets/pana.png';
 import ReNameFolder from '../../assets/Rename.png';
@@ -23,8 +23,8 @@ const formatDate = () => {
 };
 
 const FolderAction = ({navigation, actionFolder, reNameObj, from}: any) => {
-  const {setFileUpload, setActiveTab, setHiddenBottomTab} =
-    React.useContext(ThemeContext);
+  const {fileUpload} = useSelector((state: any) => state?.globalReducer);
+  const dispatch = useDispatch();
   const [inputNameValue, setInputValue] = useState('');
 
   const reNameItem = (data: any) => {
@@ -55,11 +55,17 @@ const FolderAction = ({navigation, actionFolder, reNameObj, from}: any) => {
         updatedAt: formatDate(),
         type: 'folder',
       };
-      setFileUpload((prevState: any) => [...prevState, createFolder]);
+      dispatch({
+        type: 'SET_FILE_UPLOAD',
+        payload: [...fileUpload, createFolder],
+      });
       navigation.navigate('FolderScreen');
       return;
     }
-    setFileUpload((prevState: any) => reNameItem(prevState));
+    dispatch({
+      type: 'SET_FILE_UPLOAD',
+      payload: reNameItem(fileUpload),
+    });
     if (from === 'myScan') {
       navigation.navigate('FolderScreen');
       return;
@@ -68,16 +74,32 @@ const FolderAction = ({navigation, actionFolder, reNameObj, from}: any) => {
   };
 
   React.useEffect(() => {
-    setHiddenBottomTab(true);
-    return () => setHiddenBottomTab(false);
-  }, [setHiddenBottomTab]);
+    dispatch({
+      type: 'SET_HIDDEN_BOTTOM_TAB',
+      payload: true,
+    });
+    return () => {
+      dispatch({
+        type: 'SET_HIDDEN_BOTTOM_TAB',
+        payload: false,
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
-    if (setActiveTab) {
-      setActiveTab('action-folder');
-    }
-    return () => setActiveTab('FolderScreen');
-  }, [setActiveTab]);
+    dispatch({
+      type: 'SET_ACTIVE_TAB',
+      payload: 'action-folder',
+    });
+    return () => {
+      dispatch({
+        type: 'SET_ACTIVE_TAB',
+        payload: 'FolderScreen',
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     if (reNameObj?.title) {

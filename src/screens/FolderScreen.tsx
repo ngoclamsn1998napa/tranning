@@ -11,8 +11,8 @@ import CheckBox from 'react-native-check-box';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import Swipeout from 'react-native-swipeout';
+import {useDispatch, useSelector} from 'react-redux';
 import {v4 as generateUUID} from 'uuid';
-import {ThemeContext} from '../../App';
 import CopyIcon from '../../assets/copy.png';
 import DeleteIcon from '../../assets/delete.png';
 import MoreIconWhite from '../../assets/more.png';
@@ -28,9 +28,11 @@ import BottomSheetWrap from '../components/BottomSheetWrap';
 
 export default function FolderScreen(props: any) {
   const {navigation, route, toggleCheckBox, setToggleCheckBox} = props;
+  const dispatch = useDispatch();
 
-  const {showAs, fileUpload, setFileUpload, setActiveTab} =
-    React.useContext(ThemeContext);
+  const {fileUpload, showAs} = useSelector(
+    (state: any) => state?.globalReducer,
+  );
 
   const selectedFile = route?.params?.selectedFile;
 
@@ -57,7 +59,7 @@ export default function FolderScreen(props: any) {
       ),
       onPress: () => {
         const data = listFileState.filter((value: any) => value.id !== user.id);
-        setFileUpload(data);
+        dispatch({type: 'SET_FILE_UPLOAD', payload: data});
         setListFileState(data);
       },
     },
@@ -90,7 +92,10 @@ export default function FolderScreen(props: any) {
         id: generateUUID(),
         title: value.title + ' (copy)',
       }));
-      setFileUpload([...listFileState, ...copyFileData]);
+      dispatch({
+        type: 'SET_FILE_UPLOAD',
+        payload: [...listFileState, ...copyFileData],
+      });
       setListFileState([...listFileState, ...copyFileData]);
     }
   };
@@ -101,7 +106,7 @@ export default function FolderScreen(props: any) {
         (el: any) => !toggleCheckBox.includes(el.id),
       );
 
-      setFileUpload(filterData);
+      dispatch({type: 'SET_FILE_UPLOAD', payload: filterData});
       setListFileState(filterData);
     }
   };
@@ -182,7 +187,7 @@ export default function FolderScreen(props: any) {
   React.useEffect(() => {
     if (fileUpload?.length) {
       setListFileState(fileUpload);
-      setActiveTab('folder');
+      dispatch({type: 'SET_ACTIVE_TAB', payload: 'folder'});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileUpload]);

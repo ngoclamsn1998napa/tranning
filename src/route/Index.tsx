@@ -10,7 +10,7 @@ import FolderTab from './FolderStack';
 
 import {NavigationContainer} from '@react-navigation/native';
 import BootSplash from 'react-native-bootsplash';
-import {ThemeContext} from '../../App';
+import {useDispatch, useSelector} from 'react-redux';
 import TabBarIcon from '../components/TabBarIcon';
 import TabBarLabel from '../components/TabBarLabel';
 import TabBarScanQrIcon from '../components/TabBarScanQrIcon';
@@ -22,13 +22,11 @@ import ScanTab from './ScanStack';
 const Tab = createBottomTabNavigator();
 
 function MainContainer() {
-  const {
-    sortBy,
-    fileUpload,
-    setFileUpload,
-    setSelectedFileState,
-    hiddenBottomTab,
-  } = React.useContext(ThemeContext);
+  const {fileUpload, sortBy, hiddenBottomTab} = useSelector(
+    (state: any) => state?.globalReducer,
+  );
+
+  const dispatch = useDispatch();
 
   const screenOptions = useMemo(() => {
     const newStyles = {
@@ -58,7 +56,11 @@ function MainContainer() {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
     }
-    setFileUpload(dataAfterSort);
+    dispatch({
+      type: 'SET_FILE_UPLOAD',
+      payload: dataAfterSort,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileUpload, sortBy]);
 
   return (
@@ -83,10 +85,12 @@ function MainContainer() {
             tabBarLabel: ({focused}) => TabBarLabel(focused, 'Library'),
           }}
           children={propsChildren => {
-            const selectedFileParams =
-              propsChildren?.route?.params?.selectedFile || false;
-            setSelectedFileState(selectedFileParams);
-            return <FolderTab {...propsChildren} />;
+            return (
+              <FolderTab
+                {...propsChildren}
+                selectedFile={propsChildren?.route?.params?.selectedFile}
+              />
+            );
           }}
         />
         <Tab.Screen

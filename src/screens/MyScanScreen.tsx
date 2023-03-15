@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
-import {ThemeContext} from '../../App';
+import {useDispatch, useSelector} from 'react-redux';
 import DeleteIcon from '../../assets/delete.png';
 import MoreIconWhite from '../../assets/more.png';
 import ShareIcon from '../../assets/share.png';
@@ -20,9 +20,13 @@ import ScanBackGround from '../assets/scan-background.png';
 import SearchIcon from '../assets/search.png';
 import BottomSheetWrap from '../components/BottomSheetWrap';
 const MyScanScreen = () => {
+  const fileUpload = useSelector(
+    (state: any) => state?.globalReducer?.fileUpload,
+  );
+  const dispatch = useDispatch();
+
   const [textSearch, setTextSearch] = useState<any>('');
   const [fileData, setFileData] = useState<any>([]);
-  const {fileUpload = [], setFileUpload} = React.useContext(ThemeContext);
   const navigation = useNavigation();
 
   const swipeoutBtns = (user: any) => [
@@ -46,7 +50,7 @@ const MyScanScreen = () => {
       ),
       onPress: () => {
         const data = fileUpload.filter((value: any) => value.id !== user.id);
-        setFileUpload(data);
+        dispatch({type: 'SET_FILE_UPLOAD', payload: data});
       },
     },
     {

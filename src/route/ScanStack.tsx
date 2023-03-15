@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {ThemeContext} from '../../App';
+import {useDispatch} from 'react-redux';
 import IcMenu from '../../assets/icMenu.png';
 import Setting from '../../assets/settings.png';
 import FolderAction from '../screens/FolderAction';
@@ -9,9 +9,15 @@ import FolderAction from '../screens/FolderAction';
 import MyScanScreen from '../screens/MyScanScreen';
 const SettingStack = createNativeStackNavigator();
 
-const HeaderRight = (setIsOpenBottomSheet: any) => (
+const HeaderRight = (dispatch: any) => (
   <View style={styles.headerRight}>
-    <TouchableOpacity onPress={() => setIsOpenBottomSheet(true)}>
+    <TouchableOpacity
+      onPress={() =>
+        dispatch({
+          type: 'SET_BOTTOM_SHEET',
+          payload: true,
+        })
+      }>
       <Image source={IcMenu} />
     </TouchableOpacity>
   </View>
@@ -20,12 +26,12 @@ const HeaderRight = (setIsOpenBottomSheet: any) => (
 const HeaderLeft = () => <Image source={Setting} />;
 
 export default function ScanTab(props: any) {
-  const {setIsOpenBottomSheet} = React.useContext(ThemeContext);
+  const dispatch = useDispatch();
   return (
     <SettingStack.Navigator
       screenOptions={{
         headerBackTitle: '',
-        headerRight: () => HeaderRight(setIsOpenBottomSheet),
+        headerRight: () => HeaderRight(dispatch),
         headerShadowVisible: false,
         headerStyle: {
           backgroundColor: '#ffffff',

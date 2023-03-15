@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ThemeContext} from '../../App';
+import {useDispatch, useSelector} from 'react-redux';
 import DoneIcon from '../../assets/done.png';
 import FolderPlus from '../../assets/folderPlus.png';
 import IcMenu from '../../assets/icMenu.png';
@@ -15,12 +15,10 @@ const SettingStack = createNativeStackNavigator();
 export default function FolderTab(props: any) {
   const [toggleCheckBox, setToggleCheckBox] = React.useState([]);
   const selectedFile = props?.route?.params?.selectedFile;
-  const {
-    setSelectedFileState,
-    setIsOpenBottomSheet,
-    setHiddenBottomTab,
-    fileUpload,
-  } = React.useContext(ThemeContext);
+
+  const {fileUpload} = useSelector((state: any) => state?.globalReducer);
+  const dispatch = useDispatch();
+
   const ids = fileUpload?.map((value: any) => value?.id);
 
   const HeaderLeft = React.useCallback(() => {
@@ -28,7 +26,10 @@ export default function FolderTab(props: any) {
       return (
         <TouchableOpacity
           onPress={() => {
-            setSelectedFileState(false);
+            dispatch({
+              type: 'SET_SELECTED_FILE_STATE',
+              payload: false,
+            });
             if (ids?.length === toggleCheckBox?.length) {
               setToggleCheckBox([]);
             } else {
@@ -43,14 +44,18 @@ export default function FolderTab(props: any) {
       );
     }
     return <Image source={Setting} />;
-  }, [ids, selectedFile, setSelectedFileState, toggleCheckBox?.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ids, selectedFile, toggleCheckBox?.length]);
 
   const HeaderRight = React.useCallback(() => {
     if (selectedFile) {
       return (
         <TouchableOpacity
           onPress={() => {
-            setHiddenBottomTab(false);
+            dispatch({
+              type: 'SET_HIDDEN_BOTTOM_TAB',
+              payload: false,
+            });
             props.navigation.navigate('Folder', {selectedFile: false});
           }}>
           <View>
@@ -64,21 +69,33 @@ export default function FolderTab(props: any) {
       <View style={styles.headerRight}>
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('ActionFolder', {actionFolder: 'create'})
+            props.navigation.navigate('ActionFolder', {
+              actionFolder: 'create',
+            })
           }>
           <Image source={FolderPlus} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsOpenBottomSheet(true)}>
+        <TouchableOpacity
+          onPress={() =>
+            dispatch({
+              type: 'SET_BOTTOM_SHEET',
+              payload: true,
+            })
+          }>
           <Image source={IcMenu} />
         </TouchableOpacity>
       </View>
     );
-  }, [
-    props.navigation,
-    selectedFile,
-    setHiddenBottomTab,
-    setIsOpenBottomSheet,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.navigation, selectedFile]);
+
+  React.useEffect(() => {
+    dispatch({
+      type: 'SET_SELECTED_FILE_STATE',
+      payload: selectedFile,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFile]);
 
   return (
     <SettingStack.Navigator

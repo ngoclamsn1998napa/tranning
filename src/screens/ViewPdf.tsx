@@ -1,15 +1,24 @@
 import React, {useEffect} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Pdf from 'react-native-pdf';
-import {ThemeContext} from '../../App';
+import {useDispatch} from 'react-redux';
 
 const ViewPdf = () => {
-  const {setHiddenBottomTab} = React.useContext(ThemeContext);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setHiddenBottomTab(true);
-    return () => setHiddenBottomTab(false);
-  }, [setHiddenBottomTab]);
+    dispatch({
+      type: 'SET_HIDDEN_BOTTOM_TAB',
+      payload: true,
+    });
+    return () => {
+      dispatch({
+        type: 'SET_HIDDEN_BOTTOM_TAB',
+        payload: false,
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <View style={styles.container}>
       <Pdf

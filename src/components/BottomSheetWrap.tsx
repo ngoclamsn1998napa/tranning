@@ -11,8 +11,8 @@ import {
 import DocumentPicker, {types} from 'react-native-document-picker';
 import 'react-native-get-random-values';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {useDispatch, useSelector} from 'react-redux';
 import {v4 as generateUUID} from 'uuid';
-import {ThemeContext} from '../../App';
 import FilePlusIcon from '../assets/file-plus.png';
 import GridShowAs from '../assets/grid.png';
 import ImageIcon from '../assets/image.png';
@@ -37,16 +37,10 @@ const fileAction = [
 ];
 
 export default function BottomSheetWrap({children}: any) {
-  const {
-    isBottomSheet,
-    setIsOpenBottomSheet,
-    sortBy,
-    showAs,
-    setSortBy,
-    setShowAs,
-    setFileUpload,
-    setHiddenBottomTab,
-  } = React.useContext(ThemeContext);
+  const {isBottomSheet, sortBy, showAs, fileUpload} = useSelector(
+    (state: any) => state?.globalReducer,
+  );
+  const dispatch = useDispatch();
 
   const navigation = useNavigation();
 
@@ -86,7 +80,11 @@ export default function BottomSheetWrap({children}: any) {
         0,
         50,
       );
-      setFileUpload((prevState: any) => [...prevState, ...fileItem]);
+
+      dispatch({
+        type: 'SET_FILE_UPLOAD',
+        payload: [...fileUpload, ...fileItem],
+      });
     } catch (error) {}
   };
 
@@ -98,7 +96,10 @@ export default function BottomSheetWrap({children}: any) {
           sortBy === value.key ? styles.activeSortBy : null,
         ]}
         onPress={() => {
-          setSortBy(value.key);
+          dispatch({
+            type: 'SET_SORT_BY',
+            payload: value.key,
+          });
         }}
         key={i}>
         <Text>{value.title}</Text>
@@ -114,7 +115,10 @@ export default function BottomSheetWrap({children}: any) {
           showAs === value.key ? styles.activeSortBy : null,
         ]}
         onPress={() => {
-          setShowAs(value.key);
+          dispatch({
+            type: 'SET_SHOW_AS',
+            payload: value.key,
+          });
         }}
         key={i}>
         <Image source={value.src} />
@@ -125,7 +129,10 @@ export default function BottomSheetWrap({children}: any) {
 
   const actionFilesEvent = (key: string) => {
     if (key === 'select_file') {
-      setHiddenBottomTab(true);
+      dispatch({
+        type: 'SET_HIDDEN_BOTTOM_TAB',
+        payload: true,
+      });
       navigation.navigate('Folder', {selectedFile: true});
       return;
     }
@@ -141,7 +148,10 @@ export default function BottomSheetWrap({children}: any) {
         ]}
         key={i}
         onPress={() => {
-          setIsOpenBottomSheet(false);
+          dispatch({
+            type: 'SET_HIDDEN_BOTTOM_TAB',
+            payload: false,
+          });
           actionFilesEvent(value?.key);
         }}>
         <Image source={value.src} />
@@ -156,7 +166,8 @@ export default function BottomSheetWrap({children}: any) {
     } else {
       refRBSheet?.current.close();
     }
-  }, [isBottomSheet, setIsOpenBottomSheet]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isBottomSheet]);
 
   return (
     <View>
@@ -166,7 +177,12 @@ export default function BottomSheetWrap({children}: any) {
         ref={refRBSheet}
         closeOnDragDown={true}
         closeOnPressMask={true}
-        onClose={() => setIsOpenBottomSheet(false)}>
+        onClose={() =>
+          dispatch({
+            type: 'SET_BOTTOM_SHEET',
+            payload: false,
+          })
+        }>
         <View style={styles.sheetModal}>
           <View>
             <View>
