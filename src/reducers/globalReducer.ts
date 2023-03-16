@@ -43,8 +43,6 @@ export default function globalReducer(
     case 'SET_SELECTED_FILE_STATE':
       return {...state, selectedFileState: action.payload};
     default:
-      console.log(state);
-
       return state;
   }
 }

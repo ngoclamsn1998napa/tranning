@@ -92,8 +92,9 @@ const MyScanScreen = () => {
                     sectionId={0}
                     autoClose={true}
                     right={swipeoutBtns(value)}
-                    style={styles.swipeoutStyle}>
-                    <View style={styles.fileContentRow} key={index}>
+                    style={styles.swipeoutStyle}
+                    key={index}>
+                    <View style={styles.fileContentRow}>
                       <View style={styles.fileDetail}>
                         <View style={styles.paddingBottom15}>
                           <Image
